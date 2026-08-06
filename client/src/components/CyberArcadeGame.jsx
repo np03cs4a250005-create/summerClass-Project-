@@ -245,12 +245,41 @@ const MemoryMatch = () => {
                 </div>
             )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px', maxWidth: '280px', margin: '0 auto' }}>
+            {/* 3D Flip Card styles injected via style tag */}
+            <style>{`
+                .flip-card { perspective: 600px; }
+                .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.45s cubic-bezier(0.4,0,0.2,1); transform-style: preserve-3d; }
+                .flip-card.flipped .flip-card-inner,
+                .flip-card.matched .flip-card-inner { transform: rotateY(180deg); }
+                .flip-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+                .flip-back { transform: rotateY(180deg); }
+            `}</style>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px', maxWidth: '296px', margin: '0 auto' }}>
                 {cards.map((card, i) => (
-                    <button key={card.id} onClick={() => handleCardClick(i)}
-                        style={{ height: '60px', borderRadius: '12px', fontSize: '1.6rem', cursor: !card.flipped && !card.matched ? 'pointer' : 'default', border: card.matched ? '2px solid #34d399' : card.flipped ? '2px solid #818cf8' : '1px solid rgba(255,255,255,0.12)', background: card.matched ? 'rgba(52,211,153,0.15)' : card.flipped ? 'rgba(99,102,241,0.2)' : 'rgba(15,23,42,0.85)', color: card.flipped || card.matched ? 'white' : 'transparent', transition: 'all 0.25s', transform: card.flipped || card.matched ? 'rotateY(0deg)' : 'rotateY(90deg)', boxShadow: card.matched ? '0 0 10px rgba(52,211,153,0.4)' : 'none' }}>
-                        {card.flipped || card.matched ? card.emoji : '❓'}
-                    </button>
+                    <div
+                        key={card.id}
+                        className={`flip-card ${card.flipped ? 'flipped' : ''} ${card.matched ? 'matched' : ''}`}
+                        onClick={() => handleCardClick(i)}
+                        style={{ height: '64px', cursor: !card.flipped && !card.matched ? 'pointer' : 'default' }}
+                    >
+                        <div className="flip-card-inner">
+                            {/* FRONT — Hidden face (question mark) */}
+                            <div className="flip-face flip-front" style={{
+                                background: 'rgba(15,23,42,0.9)',
+                                border: '1px solid rgba(99,102,241,0.3)',
+                                fontSize: '1.5rem',
+                                boxShadow: 'inset 0 0 12px rgba(99,102,241,0.1)',
+                            }}>❓</div>
+                            {/* BACK — Revealed emoji face */}
+                            <div className="flip-face flip-back" style={{
+                                background: card.matched ? 'rgba(52,211,153,0.18)' : 'rgba(99,102,241,0.22)',
+                                border: card.matched ? '2px solid #34d399' : '2px solid #818cf8',
+                                fontSize: '1.5rem',
+                                boxShadow: card.matched ? '0 0 14px rgba(52,211,153,0.5)' : '0 0 14px rgba(99,102,241,0.4)',
+                            }}>{card.emoji}</div>
+                        </div>
+                    </div>
                 ))}
             </div>
             <p style={{ textAlign: 'center', color: '#64748b', fontSize: '0.78rem', marginTop: '12px' }}>
@@ -335,7 +364,7 @@ const CyberSnake = () => {
                 setFood(newFood);
                 setScore(sc => sc + 10);
             }
-        }, 130);
+        }, 200);
         return () => clearInterval(iv);
     }, [running, dead]);
 
