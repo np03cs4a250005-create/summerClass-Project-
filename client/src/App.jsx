@@ -7,6 +7,7 @@ import { soundFx } from './utils/soundEffects';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import ParticleCanvas from './components/ParticleCanvas';
+import BackgroundMusic from './components/BackgroundMusic';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -140,6 +141,7 @@ const App = () => {
         <AuthProvider>
             <ToastProvider>
                 <AppRoutes />
+                <BackgroundMusic />
             </ToastProvider>
         </AuthProvider>
     );
