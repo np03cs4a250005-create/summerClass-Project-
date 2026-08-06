@@ -1,0 +1,22 @@
+# Node modules & dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables & database files
+.env
+*.env
+database.sqlite
+*.db
+
+# Build outputs
+dist/
+build/
+**/dist/
+**/build/
+
+# IDE & OS temporary files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
