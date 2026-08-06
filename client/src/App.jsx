@@ -6,6 +6,7 @@ import { soundFx } from './utils/soundEffects';
 
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
+import ParticleCanvas from './components/ParticleCanvas';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -69,7 +70,8 @@ const Layout = ({ children }) => {
     };
 
     return (
-        <div className={`dashboard-layout ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`} style={{ display: 'flex', minHeight: '100vh' }}>
+        <div className={`dashboard-layout ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`} style={{ display: 'flex', minHeight: '100vh', position: 'relative' }}>
+            <ParticleCanvas />
             <Sidebar
                 isOpen={isMobileOpen}
                 isCollapsed={isSidebarCollapsed}
