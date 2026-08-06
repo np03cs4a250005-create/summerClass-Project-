@@ -221,9 +221,9 @@ function drawCertificate(canvas, { attendee, event, certId, date, org }) {
 
 // ── Main Page ────────────────────────────────────────────────────────────────
 const QrCertificates = () => {
-    const [attendee, setAttendee]   = useState('Jane Doe');
+    const [attendee, setAttendee]   = useState('Sita Rai');
     const [event,    setEvent]      = useState('Global Tech Conference 2026');
-    const [org,      setOrg]        = useState('Gatherly Suite');
+    const [org,      setOrg]        = useState('Gatherly Suite Nepal');
     const [certId,   setCertId]     = useState(null);
     const [generated, setGenerated] = useState(false);
     const [scanning,  setScanning]  = useState(false);
@@ -269,7 +269,7 @@ const QrCertificates = () => {
         setTimeout(() => {
             setScanning(false);
             if (inputQR.startsWith('QR-')) {
-                setScanResult({ valid: true, name: 'Michael Chen', ticket: 'VIP', event: 'Global Tech 2026' });
+                setScanResult({ valid: true, name: 'Anil Bajracharya', ticket: 'VIP', event: 'Global Tech 2026' });
                 showToast('Attendee verified successfully!', 'success');
             } else {
                 setScanResult({ valid: false });

@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
 import { getAIResponse } from '../utils/aiKnowledgeEngine';
 
-const ONLINE_USERS = ['Sarah K. (Host)', 'Alex M. (Speaker)', 'Jordan L. (Attendee)'];
+const ONLINE_USERS = ['Anisha K. (Host)', 'Arjun M. (Speaker)', 'Dipesh L. (Attendee)'];
 
 const PROMPT_SUGGESTIONS = [
     'How do I reserve VIP tickets & passes?',

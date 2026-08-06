@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useToast } from '../components/Toast';
 const GamificationFiles = () => {
-    const leaderboard = [{ name: 'Michael Scott', points: 450, badge: 'Gold Volunteer' }];
+    const leaderboard = [{ name: 'Ramesh Adhikari', points: 450, badge: 'Gold Volunteer' }];
     const files = [{ id: 'f-1', name: 'event_brochure.pdf', size: '2.4 MB' }, { id: 'f-2', name: 'venue_blueprint.png', size: '5.1 MB' }];
     const { showToast } = useToast();
     return (

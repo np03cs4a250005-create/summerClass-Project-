@@ -6,10 +6,10 @@ import { useToast } from '../components/Toast';
 const AVATAR_COLORS = ['#38bdf8', '#34d399', '#fbbf24', '#c084fc', '#60a5fa', '#f472b6'];
 
 const DEFAULT_FEEDBACKS = [
-    { id: 'fb-1', attendeeName: 'Elena Rostova', rating: 5, comment: 'The Global Tech Conference exceeded all my expectations! The AI keynote session was top-notch and the QR badge scanning made entry seamless.', reply: 'Thank you Elena! We are thrilled you enjoyed the AI keynote session.', createdAt: '2026-08-06' },
-    { id: 'fb-2', attendeeName: 'Marcus Vance', rating: 5, comment: 'Outstanding venue organization and networking lounge. Met incredible startup founders and investors!', reply: 'Appreciate your feedback Marcus!', createdAt: '2026-08-05' },
-    { id: 'fb-3', attendeeName: 'Sarah Chen', rating: 4, comment: 'Great UX design summit. Would love to see more hands-on workshop breakout rooms next year!', reply: '', createdAt: '2026-08-04' },
-    { id: 'fb-4', attendeeName: 'Jordan Rivera', rating: 5, comment: 'Smooth ticket reservation and instant digital pass downloads. 10/10 event management platform!', reply: 'Thanks Jordan! Glad the pass download was instant.', createdAt: '2026-08-03' },
+    { id: 'fb-1', attendeeName: 'Priya Shrestha', rating: 5, comment: 'The Global Tech Conference exceeded all my expectations! The AI keynote session was top-notch and the QR badge scanning made entry seamless.', reply: 'Thank you Priya! We are thrilled you enjoyed the AI keynote session.', createdAt: '2026-08-06' },
+    { id: 'fb-2', attendeeName: 'Rajesh Poudel', rating: 5, comment: 'Outstanding venue organization and networking lounge. Met incredible startup founders and investors!', reply: 'Appreciate your feedback Rajesh!', createdAt: '2026-08-05' },
+    { id: 'fb-3', attendeeName: 'Kamala Tamang', rating: 4, comment: 'Great UX design summit. Would love to see more hands-on workshop breakout rooms next year!', reply: '', createdAt: '2026-08-04' },
+    { id: 'fb-4', attendeeName: 'Dipesh Gurung', rating: 5, comment: 'Smooth ticket reservation and instant digital pass downloads. 10/10 event management platform!', reply: 'Thanks Dipesh! Glad the pass download was instant.', createdAt: '2026-08-03' },
 ];
 
 const StarRating = ({ rating, onChange = null }) => {
