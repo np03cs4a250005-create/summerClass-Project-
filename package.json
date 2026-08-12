@@ -1,0 +1,15 @@
+{
+  "name": "summer-class-project",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gatherly Event Management System - Fullstack Node + React",
+  "main": "server/server.js",
+  "scripts": {
+    "build": "npm install --prefix client && npm run build --prefix client && npm install --prefix server",
+    "start": "node server/server.js",
+    "dev": "node server/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

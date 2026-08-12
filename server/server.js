@@ -38,9 +38,23 @@ app.use('/api/finance', require('./routes/finance'));
 app.use('/api/logs', require('./routes/logs'));
 app.use('/api/email', require('./routes/email'));
 
-// Catch-all route handler for unknown endpoints
-app.use((req, res) => {
-    res.status(404).json({ error: 'Endpoint not found' });
+// Serve static files from React client build directory
+const clientDistPath = path.join(__dirname, '../client/dist');
+app.use(express.static(clientDistPath));
+
+// Catch-all route handler for unknown API endpoints
+app.use('/api/*', (req, res) => {
+    res.status(404).json({ error: 'API Endpoint not found' });
+});
+
+// React SPA fallback handler for non-API routes
+app.get('*', (req, res) => {
+    const indexPath = path.join(clientDistPath, 'index.html');
+    if (require('fs').existsSync(indexPath)) {
+        res.sendFile(indexPath);
+    } else {
+        res.status(404).json({ error: 'Page not found' });
+    }
 });
 
 app.listen(PORT, () => {
