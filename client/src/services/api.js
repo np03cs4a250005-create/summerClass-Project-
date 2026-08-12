@@ -99,6 +99,7 @@ export const chatAPI = {
 
 export const financeAPI = {
     getAll: () => fetchAPI('/finance', 'GET'),
+    getSummary: () => fetchAPI('/finance', 'GET'),
     addExpense: (data) => fetchAPI('/finance/expenses', 'POST', data),
 };
 

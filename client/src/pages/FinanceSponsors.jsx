@@ -69,18 +69,20 @@ const FinanceSponsors = () => {
     const [calcAudioVisual, setCalcAudioVisual] = useState(1800);
 
     useEffect(() => {
-        financeAPI.getSummary()
-            .then(r => {
-                if (r.data) {
-                    if (Array.isArray(r.data.expenses) && r.data.expenses.length > 0) {
-                        setExpenses(prev => [...prev, ...r.data.expenses.filter(e => !prev.some(p => p.id === e.id))]);
+        if (financeAPI && typeof financeAPI.getAll === 'function') {
+            financeAPI.getAll()
+                .then(r => {
+                    if (r && r.data) {
+                        if (Array.isArray(r.data.expenses) && r.data.expenses.length > 0) {
+                            setExpenses(prev => [...prev, ...r.data.expenses.filter(e => !prev.some(p => p.id === e.id))]);
+                        }
+                        if (Array.isArray(r.data.sponsors) && r.data.sponsors.length > 0) {
+                            setSponsors(prev => [...prev, ...r.data.sponsors.filter(s => !prev.some(p => p.id === s.id))]);
+                        }
                     }
-                    if (Array.isArray(r.data.sponsors) && r.data.sponsors.length > 0) {
-                        setSponsors(prev => [...prev, ...r.data.sponsors.filter(s => !prev.some(p => p.id === s.id))]);
-                    }
-                }
-            })
-            .catch(() => {});
+                })
+                .catch(() => {});
+        }
     }, []);
 
     const filteredExpenses = expenses.filter((e) => {
