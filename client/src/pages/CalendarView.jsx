@@ -104,6 +104,18 @@ const CalendarView = () => {
         showToast(`Scheduled "${created.name}" on ${selectedDateStr}!`, 'success');
     };
 
+    const handleDeleteEvent = async (id, name) => {
+        if (window.confirm(`Are you sure you want to remove "${name}" from the calendar?`)) {
+            try {
+                await eventsAPI.delete(id);
+            } catch {
+                // local fallback if id is not in backend
+            }
+            setEvents(prev => prev.filter(ev => ev.id !== id));
+            showToast(`Removed "${name}" from calendar`, 'info');
+        }
+    };
+
     const filteredEvents = events.filter(ev => {
         if (activeFilter === 'all') return true;
         return ev.category.toLowerCase() === activeFilter.toLowerCase();
@@ -303,10 +315,31 @@ const CalendarView = () => {
                                                     fontSize: '0.72rem',
                                                     fontWeight: 600,
                                                     overflow: 'hidden',
-                                                    textOverflow: 'ellipsis',
-                                                    whiteSpace: 'nowrap'
+                                                    display: 'flex',
+                                                    justify: 'space-between',
+                                                    alignItems: 'center',
+                                                    gap: '4px'
                                                 }}>
-                                                {ev.name}
+                                                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ev.name}</span>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleDeleteEvent(ev.id, ev.name);
+                                                    }}
+                                                    title="Remove event from calendar"
+                                                    style={{
+                                                        background: 'none',
+                                                        border: 'none',
+                                                        color: '#ef4444',
+                                                        cursor: 'pointer',
+                                                        padding: '0 2px',
+                                                        fontSize: '0.72rem',
+                                                        lineHeight: 1,
+                                                        display: 'flex',
+                                                        alignItems: 'center'
+                                                    }}>
+                                                    <i className="fas fa-xmark" style={{ fontSize: '0.68rem' }}></i>
+                                                </button>
                                             </div>
                                         ))}
                                         {dayEvents.length > 2 && (
@@ -358,7 +391,33 @@ const CalendarView = () => {
                                             <span style={{ fontSize: '0.75rem', fontWeight: 800, color: ev.color, background: `${ev.color}18`, padding: '3px 10px', borderRadius: '12px', border: `1px solid ${ev.color}40` }}>
                                                 {ev.category}
                                             </span>
-                                            <i className={`fas ${ev.icon}`} style={{ color: ev.color, fontSize: '1.1rem' }}></i>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleDeleteEvent(ev.id, ev.name);
+                                                    }}
+                                                    title="Remove event from calendar"
+                                                    style={{
+                                                        background: 'rgba(239, 68, 68, 0.15)',
+                                                        border: '1px solid rgba(239, 68, 68, 0.35)',
+                                                        color: '#ef4444',
+                                                        width: '28px',
+                                                        height: '28px',
+                                                        borderRadius: '8px',
+                                                        cursor: 'pointer',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justify: 'center',
+                                                        transition: 'all 0.2s ease'
+                                                    }}
+                                                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.3)'}
+                                                    onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.15)'}
+                                                >
+                                                    <i className="fas fa-trash-can" style={{ fontSize: '0.75rem' }}></i>
+                                                </button>
+                                                <i className={`fas ${ev.icon}`} style={{ color: ev.color, fontSize: '1.1rem' }}></i>
+                                            </div>
                                         </div>
 
                                         <h4 style={{ margin: '0 0 8px', fontSize: '1.05rem', fontWeight: 700, color: '#f8fafc' }}>
