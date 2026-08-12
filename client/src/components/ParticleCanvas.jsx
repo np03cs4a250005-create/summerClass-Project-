@@ -40,8 +40,8 @@ const ParticleCanvas = () => {
         };
 
         const handleMouseDown = (e) => {
-            // Ignore clicks on buttons/inputs/interactive elements so UI controls work normally
-            if (e.target.closest('button, a, input, select, textarea, .holo-card, .btn')) {
+            // Ignore clicks on cards, buttons, inputs, modals, and UI elements to keep UI butter-smooth
+            if (e.target.closest('button, a, input, select, textarea, .card-glass, .event-card, .modal-overlay, .modal-box, .sidebar, .header, .btn, [role="button"]')) {
                 return;
             }
             hold.isHolding = true;
