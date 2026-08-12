@@ -840,6 +840,31 @@ textarea.input-error {
     text-align: center !important;
 }
 
+.btn-icon-grid, button.btn-icon-grid, a.btn-icon-grid {
+    display: grid !important;
+    place-items: center !important;
+    place-content: center !important;
+    text-align: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    box-sizing: border-box !important;
+    border-radius: 10px !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-icon-grid i, button.btn-icon-grid i, a.btn-icon-grid i {
+    display: block !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+}
+
 /* ─── Hover Lift ─── */
 .hover-lift {
     transition: var(--transition);

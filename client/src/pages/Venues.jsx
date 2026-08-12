@@ -167,84 +167,95 @@ const Venues = () => {
 
     return (
         <div style={{ maxWidth: '1280px', margin: '0 auto', fontFamily: 'Inter, system-ui, sans-serif' }}>
-            {/* Header Title & Action Bar */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
-                <div>
-                    <h2 style={{ fontSize: '2.1rem', fontWeight: 800, margin: 0, background: 'linear-gradient(135deg, #f8fafc, #38bdf8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <i className="fas fa-building" style={{ color: '#38bdf8' }}></i>
-                        Venues & Seating Hub
-                    </h2>
-                    <p style={{ margin: '4px 0 0', color: '#94a3b8', fontSize: '0.95rem' }}>
-                        Explore event halls, inspect seating layout configurations, and reserve world-class venues.
-                    </p>
-                </div>
+            {/* Hero Header Showcase Banner */}
+            <div style={{
+                background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(9, 13, 22, 0.98))',
+                border: '1.5px solid rgba(56, 189, 248, 0.35)',
+                borderRadius: '24px',
+                padding: '28px 32px',
+                marginBottom: '28px',
+                boxShadow: '0 20px 50px rgba(0,0,0,0.6), 0 0 35px rgba(37,99,235,0.25)',
+                backdropFilter: 'blur(16px)'
+            }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', marginBottom: '24px' }}>
+                    <div>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.3)', padding: '4px 14px', borderRadius: '20px', color: '#38bdf8', fontSize: '0.8rem', fontWeight: 800, marginBottom: '10px' }}>
+                            <i className="fas fa-sparkles"></i> GATHERLY VENUE ARCHITECTURE HUB
+                        </div>
+                        <h2 style={{ fontSize: '2.3rem', fontWeight: 800, margin: 0, background: 'linear-gradient(135deg, #ffffff, #38bdf8, #818cf8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <i className="fas fa-building-user" style={{ color: '#38bdf8' }}></i>
+                            Venues & Seating Hub
+                        </h2>
+                        <p style={{ margin: '6px 0 0', color: '#94a3b8', fontSize: '0.98rem', maxWidth: '680px' }}>
+                            Explore tier-1 event halls, inspect hall seating configurations, review tech amenities, and manage venue reservations.
+                        </p>
+                    </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <button
                         onClick={() => setIsAddModalOpen(true)}
                         style={{
                             background: 'linear-gradient(135deg, #2563eb, #0284c7)',
                             border: 'none',
                             color: '#ffffff',
-                            padding: '10px 20px',
-                            borderRadius: '12px',
-                            fontWeight: 700,
-                            fontSize: '0.9rem',
+                            padding: '12px 24px',
+                            borderRadius: '14px',
+                            fontWeight: 800,
+                            fontSize: '0.95rem',
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '8px',
-                            boxShadow: '0 0 20px rgba(37, 99, 235, 0.4)'
+                            gap: '10px',
+                            boxShadow: '0 0 25px rgba(37, 99, 235, 0.5)'
                         }}>
                         <i className="fas fa-plus"></i> Add New Venue
                     </button>
                 </div>
+
+                {/* 4 KPI Analytics Cards Bar */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '16px' }}>
+                    <div style={{ background: 'rgba(9, 13, 22, 0.75)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: '16px', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#38bdf8', fontSize: '1.2rem', flexShrink: 0 }}>
+                            <i className="fas fa-landmark"></i>
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '0.76rem', color: '#94a3b8', fontWeight: 600 }}>Active Halls</div>
+                            <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#f8fafc' }}>{venues.length} Facilities</div>
+                        </div>
+                    </div>
+
+                    <div style={{ background: 'rgba(9, 13, 22, 0.75)', border: '1px solid rgba(52, 211, 153, 0.3)', borderRadius: '16px', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(52, 211, 153, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#34d399', fontSize: '1.2rem', flexShrink: 0 }}>
+                            <i className="fas fa-chair"></i>
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '0.76rem', color: '#94a3b8', fontWeight: 600 }}>Total Max Capacity</div>
+                            <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#f8fafc' }}>{totalCapacity.toLocaleString()} Seats</div>
+                        </div>
+                    </div>
+
+                    <div style={{ background: 'rgba(9, 13, 22, 0.75)', border: '1px solid rgba(192, 132, 252, 0.3)', borderRadius: '16px', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(192, 132, 252, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c084fc', fontSize: '1.2rem', flexShrink: 0 }}>
+                            <i className="fas fa-sack-dollar"></i>
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '0.76rem', color: '#94a3b8', fontWeight: 600 }}>Avg Rental Rate</div>
+                            <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#f8fafc' }}>${avgRentPrice.toLocaleString()} / Day</div>
+                        </div>
+                    </div>
+
+                    <div style={{ background: 'rgba(9, 13, 22, 0.75)', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '16px', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(251, 191, 36, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fbbf24', fontSize: '1.2rem', flexShrink: 0 }}>
+                            <i className="fas fa-bolt"></i>
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '0.76rem', color: '#94a3b8', fontWeight: 600 }}>AV Tech Rating</div>
+                            <div style={{ fontSize: '1.3rem', fontWeight: 800, color: '#f8fafc' }}>99.8% Certified</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            {/* Top KPI Analytics Banner */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-                <div style={{ background: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '18px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#38bdf8', fontSize: '1.3rem', flexShrink: 0 }}>
-                        <i className="fas fa-landmark"></i>
-                    </div>
-                    <div>
-                        <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>Active Venues</div>
-                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc' }}>{venues.length} Facilities</div>
-                    </div>
-                </div>
-
-                <div style={{ background: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(52, 211, 153, 0.25)', borderRadius: '18px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(52, 211, 153, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#34d399', fontSize: '1.3rem', flexShrink: 0 }}>
-                        <i className="fas fa-chair"></i>
-                    </div>
-                    <div>
-                        <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>Total Seating Capacity</div>
-                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc' }}>{totalCapacity.toLocaleString()} Max Seats</div>
-                    </div>
-                </div>
-
-                <div style={{ background: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(192, 132, 252, 0.25)', borderRadius: '18px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(192, 132, 252, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c084fc', fontSize: '1.3rem', flexShrink: 0 }}>
-                        <i className="fas fa-sack-dollar"></i>
-                    </div>
-                    <div>
-                        <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>Avg Rental Rate</div>
-                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc' }}>${avgRentPrice.toLocaleString()} / Day</div>
-                    </div>
-                </div>
-
-                <div style={{ background: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(251, 191, 36, 0.25)', borderRadius: '18px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(251, 191, 36, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fbbf24', fontSize: '1.3rem', flexShrink: 0 }}>
-                        <i className="fas fa-bolt"></i>
-                    </div>
-                    <div>
-                        <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>AV & Tech Rating</div>
-                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc' }}>99.4% Certified</div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Filter & Search Toolbar */}
+            {/* Filter Tabs & Search Toolbar */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
                 <div style={{ display: 'flex', gap: '8px' }}>
                     {['all', 'indoor', 'outdoor'].map(type => (
@@ -384,7 +395,7 @@ const Venues = () => {
                                 )}
                             </div>
 
-                            {/* Card Footer Action Bar */}
+                            {/* Card Footer Action Bar with 100% Dead-Centered Grid Icon Buttons */}
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '14px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
                                 <button
                                     onClick={() => setSelectedVenue(v)}
@@ -405,7 +416,7 @@ const Venues = () => {
                                     <i className="fas fa-eye"></i> View Details & Map
                                 </button>
 
-                                {/* Perfectly Centered Icon Buttons */}
+                                {/* 100% DEAD-CENTERED Grid Icon Buttons */}
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <a
                                         href={v.mapUrl}
@@ -414,42 +425,45 @@ const Venues = () => {
                                         onClick={(e) => e.stopPropagation()}
                                         title="Open Google Maps Location"
                                         style={{
-                                            background: 'rgba(255,255,255,0.08)',
-                                            border: '1px solid rgba(255,255,255,0.15)',
-                                            color: '#f8fafc',
-                                            width: '36px',
-                                            height: '36px',
+                                            display: 'grid',
+                                            placeItems: 'center',
+                                            placeContent: 'center',
+                                            width: '38px',
+                                            height: '38px',
+                                            minWidth: '38px',
+                                            minHeight: '38px',
                                             borderRadius: '10px',
-                                            display: 'inline-flex',
-                                            alignItems: 'center',
-                                            justify: 'center',
+                                            background: 'rgba(255, 255, 255, 0.08)',
+                                            border: '1px solid rgba(255, 255, 255, 0.15)',
                                             textDecoration: 'none',
-                                            boxSizing: 'border-box',
                                             padding: 0,
-                                            margin: 0
+                                            margin: 0,
+                                            boxSizing: 'border-box'
                                         }}>
-                                        <i className="fas fa-location-dot" style={{ color: '#fbbf24', fontSize: '0.92rem', margin: 0, lineHeight: 1 }}></i>
+                                        <i className="fas fa-location-dot" style={{ color: '#fbbf24', fontSize: '0.95rem', margin: '0 auto', padding: 0, lineHeight: 1, display: 'block', textCenter: 'center' }}></i>
                                     </a>
 
                                     <button
                                         onClick={(e) => handleDeleteVenue(v.id, v.name, e)}
                                         title="Delete Venue"
                                         style={{
+                                            display: 'grid',
+                                            placeItems: 'center',
+                                            placeContent: 'center',
+                                            width: '38px',
+                                            height: '38px',
+                                            minWidth: '38px',
+                                            minHeight: '38px',
+                                            borderRadius: '10px',
                                             background: 'rgba(239, 68, 68, 0.15)',
                                             border: '1px solid rgba(239, 68, 68, 0.35)',
                                             color: '#ef4444',
-                                            width: '36px',
-                                            height: '36px',
-                                            borderRadius: '10px',
                                             cursor: 'pointer',
-                                            display: 'inline-flex',
-                                            alignItems: 'center',
-                                            justify: 'center',
-                                            boxSizing: 'border-box',
                                             padding: 0,
-                                            margin: 0
+                                            margin: 0,
+                                            boxSizing: 'border-box'
                                         }}>
-                                        <i className="fas fa-trash-can" style={{ fontSize: '0.88rem', margin: 0, lineHeight: 1 }}></i>
+                                        <i className="fas fa-trash-can" style={{ fontSize: '0.9rem', margin: '0 auto', padding: 0, lineHeight: 1, display: 'block', textCenter: 'center' }}></i>
                                     </button>
                                 </div>
                             </div>
@@ -489,7 +503,7 @@ const Venues = () => {
                             </h3>
                             <button
                                 onClick={() => setSelectedVenue(null)}
-                                style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: '#94a3b8', width: '34px', height: '34px', borderRadius: '10px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                                style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: '#94a3b8', width: '34px', height: '34px', borderRadius: '10px', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
                                 <i className="fas fa-times" style={{ margin: 0 }}></i>
                             </button>
                         </div>
@@ -603,7 +617,7 @@ const Venues = () => {
                             </h3>
                             <button
                                 onClick={() => setIsAddModalOpen(false)}
-                                style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: '#94a3b8', width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                                style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: '#94a3b8', width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
                                 <i className="fas fa-times" style={{ margin: 0 }}></i>
                             </button>
                         </div>
