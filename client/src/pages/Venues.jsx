@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { venuesAPI } from '../services/api';
 import { useToast } from '../components/Toast';
 
@@ -472,74 +473,81 @@ const Venues = () => {
                 ))}
             </div>
 
-            {/* Detailed Venue Inspector & Seating Map Modal */}
-            {selectedVenue && (
+            {/* PORTAL: Detailed Venue Inspector & Seating Map Modal */}
+            {selectedVenue && createPortal(
                 <div style={{
                     position: 'fixed',
-                    inset: 0,
-                    zIndex: 99999,
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    zIndex: 999999,
                     background: 'rgba(5, 11, 26, 0.88)',
-                    backdropFilter: 'blur(16px)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justify: 'center',
-                    padding: '20px'
+                    backdropFilter: 'blur(20px)',
+                    display: 'grid',
+                    placeItems: 'center',
+                    placeContent: 'center',
+                    padding: '24px',
+                    boxSizing: 'border-box',
+                    margin: 0
                 }}>
                     <div style={{
                         width: '100%',
-                        maxWidth: '660px',
+                        maxWidth: '680px',
                         background: 'linear-gradient(135deg, #0f172a, #090d16)',
-                        border: '1.5px solid rgba(56, 189, 248, 0.4)',
-                        borderRadius: '24px',
-                        padding: '28px',
-                        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(37, 99, 235, 0.3)',
+                        border: '2px solid rgba(56, 189, 248, 0.5)',
+                        borderRadius: '28px',
+                        padding: '32px',
+                        boxShadow: '0 30px 80px rgba(0, 0, 0, 0.95), 0 0 60px rgba(37, 99, 235, 0.35)',
                         maxHeight: '90vh',
                         overflowY: 'auto'
                     }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                            <h3 style={{ margin: 0, fontSize: '1.35rem', fontWeight: 800, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <h3 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <i className="fas fa-building" style={{ color: '#38bdf8' }}></i>
                                 {selectedVenue.name}
                             </h3>
                             <button
                                 onClick={() => setSelectedVenue(null)}
-                                style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: '#94a3b8', width: '34px', height: '34px', borderRadius: '10px', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
-                                <i className="fas fa-times" style={{ margin: 0 }}></i>
+                                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: '#cbd5e1', width: '38px', height: '38px', borderRadius: '12px', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
+                                <i className="fas fa-times" style={{ margin: 0, fontSize: '1rem' }}></i>
                             </button>
                         </div>
 
-                        <div style={{ position: 'relative', height: '220px', borderRadius: '16px', overflow: 'hidden', marginBottom: '20px' }}>
+                        <div style={{ position: 'relative', height: '220px', borderRadius: '18px', overflow: 'hidden', marginBottom: '20px' }}>
                             <img src={selectedVenue.coverUrl || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80'} alt={selectedVenue.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 0%, rgba(15,23,42,0.95) 100%)' }}></div>
                             <div style={{ position: 'absolute', bottom: '16px', left: '16px', right: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ background: 'rgba(56,189,248,0.25)', color: '#38bdf8', padding: '4px 12px', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 700 }}>
+                                <span style={{ background: 'rgba(56,189,248,0.25)', color: '#38bdf8', padding: '4px 14px', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 700 }}>
                                     {selectedVenue.isIndoor ? 'Indoor Multi-Purpose Hall' : 'Outdoor Open-Air Pavilion'}
                                 </span>
-                                <span style={{ background: 'rgba(251,191,36,0.25)', color: '#fbbf24', padding: '4px 12px', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 800 }}>
+                                <span style={{ background: 'rgba(251,191,36,0.25)', color: '#fbbf24', padding: '4px 14px', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 800 }}>
                                     Capacity: {selectedVenue.capacity} Guests
                                 </span>
                             </div>
                         </div>
 
                         {/* Interactive Seating Layout Preview Grid */}
-                        <div style={{ background: 'rgba(9, 13, 22, 0.9)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(56,189,248,0.25)', marginBottom: '20px', textAlign: 'center' }}>
+                        <div style={{ background: 'rgba(9, 13, 22, 0.9)', padding: '18px', borderRadius: '18px', border: '1px solid rgba(56,189,248,0.25)', marginBottom: '20px', textAlign: 'center' }}>
                             <div style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '10px' }}>
                                 STAGE & SEATING MAP PREVIEW
                             </div>
-                            <div style={{ background: 'rgba(37,99,235,0.2)', border: '1px solid rgba(56,189,248,0.4)', borderRadius: '8px', padding: '6px', fontSize: '0.8rem', color: '#f8fafc', fontWeight: 700, margin: '0 auto 14px', maxWidth: '300px' }}>
+                            <div style={{ background: 'rgba(37,99,235,0.2)', border: '1px solid rgba(56,189,248,0.4)', borderRadius: '10px', padding: '8px', fontSize: '0.84rem', color: '#f8fafc', fontWeight: 700, margin: '0 auto 14px', maxWidth: '320px' }}>
                                 🎭 MAIN PRESENTATION STAGE
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '6px', maxWidth: '320px', margin: '0 auto' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '6px', maxWidth: '340px', margin: '0 auto' }}>
                                 {Array.from({ length: 30 }, (_, i) => (
                                     <div key={i} title={`Seat ${i + 1}`} style={{
-                                        height: '18px',
+                                        height: '20px',
                                         borderRadius: '4px',
                                         background: i < 6 ? '#fbbf24' : (i < 18 ? '#38bdf8' : '#34d399'),
                                         opacity: 0.85
                                     }}></div>
                                 ))}
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', fontSize: '0.72rem', color: '#94a3b8', marginTop: '12px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', fontSize: '0.76rem', color: '#94a3b8', marginTop: '14px' }}>
                                 <span><span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#fbbf24', borderRadius: '2px', marginRight: '4px' }}></span>VIP Row</span>
                                 <span><span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#38bdf8', borderRadius: '2px', marginRight: '4px' }}></span>Premium Pass</span>
                                 <span><span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#34d399', borderRadius: '2px', marginRight: '4px' }}></span>General Admission</span>
@@ -547,17 +555,17 @@ const Venues = () => {
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginBottom: '24px' }}>
-                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '14px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '14px 18px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.06)' }}>
                                 <div style={{ fontSize: '0.8rem', color: '#38bdf8', fontWeight: 800, textTransform: 'uppercase', marginBottom: '4px' }}>Seating & Hall Layout</div>
                                 <div style={{ fontSize: '0.95rem', color: '#f8fafc', fontWeight: 600 }}>{selectedVenue.hallLayout}</div>
                             </div>
 
-                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '14px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '14px 18px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.06)' }}>
                                 <div style={{ fontSize: '0.8rem', color: '#34d399', fontWeight: 800, textTransform: 'uppercase', marginBottom: '4px' }}>Facilities & Amenities</div>
                                 <div style={{ fontSize: '0.9rem', color: '#cbd5e1' }}>{selectedVenue.facilities}</div>
                             </div>
 
-                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '14px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.06)' }}>
+                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '14px 18px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.06)' }}>
                                 <div style={{ fontSize: '0.8rem', color: '#fbbf24', fontWeight: 800, textTransform: 'uppercase', marginBottom: '4px' }}>Parking & Access Info</div>
                                 <div style={{ fontSize: '0.9rem', color: '#cbd5e1' }}>{selectedVenue.parkingInfo}</div>
                             </div>
@@ -569,8 +577,8 @@ const Venues = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{
-                                    padding: '10px 20px',
-                                    borderRadius: '12px',
+                                    padding: '12px 24px',
+                                    borderRadius: '14px',
                                     background: 'linear-gradient(135deg, #2563eb, #0284c7)',
                                     color: '#ffffff',
                                     fontWeight: 700,
@@ -584,75 +592,83 @@ const Venues = () => {
                             </a>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
-            {/* Add Venue Modal */}
-            {isAddModalOpen && (
+            {/* PORTAL: Add Venue Modal */}
+            {isAddModalOpen && createPortal(
                 <div style={{
                     position: 'fixed',
-                    inset: 0,
-                    zIndex: 99999,
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    zIndex: 999999,
                     background: 'rgba(5, 11, 26, 0.88)',
-                    backdropFilter: 'blur(16px)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justify: 'center',
-                    padding: '20px'
+                    backdropFilter: 'blur(20px)',
+                    display: 'grid',
+                    placeItems: 'center',
+                    placeContent: 'center',
+                    padding: '24px',
+                    boxSizing: 'border-box',
+                    margin: 0
                 }}>
                     <div style={{
                         width: '100%',
-                        maxWidth: '520px',
+                        maxWidth: '620px',
                         background: 'linear-gradient(135deg, #0f172a, #090d16)',
-                        border: '1.5px solid rgba(56, 189, 248, 0.4)',
-                        borderRadius: '24px',
-                        padding: '28px',
-                        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(37, 99, 235, 0.3)',
+                        border: '2px solid rgba(56, 189, 248, 0.5)',
+                        borderRadius: '28px',
+                        padding: '36px',
+                        boxShadow: '0 30px 80px rgba(0, 0, 0, 0.95), 0 0 60px rgba(37, 99, 235, 0.35)',
                         fontFamily: 'Inter, system-ui, sans-serif'
                     }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                            <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '16px' }}>
+                            <h3 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <i className="fas fa-plus-circle" style={{ color: '#38bdf8' }}></i>
                                 Add New Venue
                             </h3>
                             <button
                                 onClick={() => setIsAddModalOpen(false)}
-                                style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: '#94a3b8', width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
-                                <i className="fas fa-times" style={{ margin: 0 }}></i>
+                                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: '#cbd5e1', width: '38px', height: '38px', borderRadius: '12px', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
+                                <i className="fas fa-times" style={{ margin: 0, fontSize: '1rem' }}></i>
                             </button>
                         </div>
 
-                        <form onSubmit={handleCreateSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <form onSubmit={handleCreateSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Venue Name</label>
+                                <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>Venue Name</label>
                                 <input
                                     type="text"
                                     required
                                     placeholder="e.g. San Francisco Innovation Hub"
                                     value={newVenue.name}
                                     onChange={(e) => setNewVenue({ ...newVenue, name: e.target.value })}
-                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(56, 189, 248, 0.3)', color: '#ffffff', outline: 'none' }}
+                                    style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', background: 'rgba(15, 23, 42, 0.95)', border: '1.5px solid rgba(56, 189, 248, 0.4)', color: '#ffffff', fontSize: '0.95rem', outline: 'none' }}
                                 />
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Capacity (Seats)</label>
+                                    <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>Capacity (Seats)</label>
                                     <input
                                         type="number"
                                         required
                                         value={newVenue.capacity}
                                         onChange={(e) => setNewVenue({ ...newVenue, capacity: Number(e.target.value) })}
-                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(56, 189, 248, 0.3)', color: '#ffffff', outline: 'none' }}
+                                        style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', background: 'rgba(15, 23, 42, 0.95)', border: '1.5px solid rgba(56, 189, 248, 0.4)', color: '#ffffff', fontSize: '0.95rem', outline: 'none' }}
                                     />
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Type</label>
+                                    <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>Type</label>
                                     <select
                                         value={newVenue.isIndoor ? 'indoor' : 'outdoor'}
                                         onChange={(e) => setNewVenue({ ...newVenue, isIndoor: e.target.value === 'indoor' })}
-                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(56, 189, 248, 0.3)', color: '#ffffff', outline: 'none' }}>
+                                        style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', background: 'rgba(15, 23, 42, 0.95)', border: '1.5px solid rgba(56, 189, 248, 0.4)', color: '#ffffff', fontSize: '0.95rem', outline: 'none' }}>
                                         <option value="indoor">Indoor Hall</option>
                                         <option value="outdoor">Outdoor Stage</option>
                                     </select>
@@ -660,43 +676,44 @@ const Venues = () => {
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Hall Seating Layout</label>
+                                <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>Hall Seating Layout</label>
                                 <input
                                     type="text"
                                     placeholder="e.g. Auditorium Style (500 seats)"
                                     value={newVenue.hallLayout}
                                     onChange={(e) => setNewVenue({ ...newVenue, hallLayout: e.target.value })}
-                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(56, 189, 248, 0.3)', color: '#ffffff', outline: 'none' }}
+                                    style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', background: 'rgba(15, 23, 42, 0.95)', border: '1.5px solid rgba(56, 189, 248, 0.4)', color: '#ffffff', fontSize: '0.95rem', outline: 'none' }}
                                 />
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Facilities & Amenities</label>
+                                <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>Facilities & Amenities</label>
                                 <input
                                     type="text"
                                     placeholder="e.g. Wi-Fi 6E, Stage Lighting, Audio System"
                                     value={newVenue.facilities}
                                     onChange={(e) => setNewVenue({ ...newVenue, facilities: e.target.value })}
-                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(56, 189, 248, 0.3)', color: '#ffffff', outline: 'none' }}
+                                    style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', background: 'rgba(15, 23, 42, 0.95)', border: '1.5px solid rgba(56, 189, 248, 0.4)', color: '#ffffff', fontSize: '0.95rem', outline: 'none' }}
                                 />
                             </div>
 
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '14px', marginTop: '14px' }}>
                                 <button
                                     type="button"
                                     onClick={() => setIsAddModalOpen(false)}
-                                    style={{ padding: '10px 18px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', fontWeight: 600, cursor: 'pointer' }}>
+                                    style={{ padding: '12px 24px', borderRadius: '14px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)', color: '#94a3b8', fontWeight: 700, fontSize: '0.92rem', cursor: 'pointer' }}>
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    style={{ padding: '10px 22px', borderRadius: '10px', background: 'linear-gradient(135deg, #2563eb, #0284c7)', border: 'none', color: '#ffffff', fontWeight: 700, cursor: 'pointer', boxShadow: '0 0 20px rgba(37, 99, 235, 0.4)' }}>
+                                    style={{ padding: '12px 30px', borderRadius: '14px', background: 'linear-gradient(135deg, #2563eb, #0284c7)', border: 'none', color: '#ffffff', fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer', boxShadow: '0 0 25px rgba(37, 99, 235, 0.5)' }}>
                                     Save Venue
                                 </button>
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { tasksAPI } from '../services/api';
 import { useToast } from '../components/Toast';
 
@@ -203,10 +204,10 @@ const TasksAgenda = () => {
                                 background: 'linear-gradient(135deg, #2563eb, #0284c7)',
                                 border: 'none',
                                 color: '#ffffff',
-                                padding: '12px 22px',
+                                padding: '12px 24px',
                                 borderRadius: '14px',
                                 fontWeight: 800,
-                                fontSize: '0.92rem',
+                                fontSize: '0.95rem',
                                 cursor: 'pointer',
                                 display: 'inline-flex',
                                 alignItems: 'center',
@@ -219,17 +220,18 @@ const TasksAgenda = () => {
                         <button
                             onClick={() => setShowAddAgendaModal(true)}
                             style={{
-                                background: 'rgba(192, 132, 252, 0.15)',
-                                border: '1px solid rgba(192, 132, 252, 0.4)',
-                                color: '#c084fc',
-                                padding: '12px 22px',
+                                background: 'linear-gradient(135deg, #9333ea, #c084fc)',
+                                border: 'none',
+                                color: '#ffffff',
+                                padding: '12px 24px',
                                 borderRadius: '14px',
                                 fontWeight: 800,
-                                fontSize: '0.92rem',
+                                fontSize: '0.95rem',
                                 cursor: 'pointer',
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '8px'
+                                gap: '8px',
+                                boxShadow: '0 0 25px rgba(192, 132, 252, 0.5)'
                             }}>
                             <i className="fas fa-calendar-plus"></i> Add Session
                         </button>
@@ -498,17 +500,18 @@ const TasksAgenda = () => {
                         <button
                             onClick={() => setShowAddAgendaModal(true)}
                             style={{
-                                background: 'rgba(192, 132, 252, 0.18)',
-                                border: '1px solid rgba(192, 132, 252, 0.4)',
-                                color: '#c084fc',
-                                padding: '7px 14px',
-                                borderRadius: '10px',
-                                fontWeight: 700,
-                                fontSize: '0.82rem',
+                                background: 'linear-gradient(135deg, #9333ea, #c084fc)',
+                                border: 'none',
+                                color: '#ffffff',
+                                padding: '8px 16px',
+                                borderRadius: '12px',
+                                fontWeight: 800,
+                                fontSize: '0.85rem',
                                 cursor: 'pointer',
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '6px'
+                                gap: '6px',
+                                boxShadow: '0 0 15px rgba(192, 132, 252, 0.4)'
                             }}>
                             <i className="fas fa-plus"></i> Add Session
                         </button>
@@ -580,72 +583,83 @@ const TasksAgenda = () => {
                 </div>
             </div>
 
-            {/* Add Task Modal */}
-            {showAddTaskModal && (
+            {/* PORTAL: Add Task Modal (DEAD-CENTERED & LARGE) */}
+            {showAddTaskModal && createPortal(
                 <div style={{
                     position: 'fixed',
-                    inset: 0,
-                    zIndex: 99999,
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    zIndex: 999999,
                     background: 'rgba(5, 11, 26, 0.88)',
-                    backdropFilter: 'blur(16px)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justify: 'center',
-                    padding: '20px'
+                    backdropFilter: 'blur(20px)',
+                    display: 'grid',
+                    placeItems: 'center',
+                    placeContent: 'center',
+                    padding: '24px',
+                    boxSizing: 'border-box',
+                    margin: 0
                 }}>
                     <div style={{
                         width: '100%',
-                        maxWidth: '480px',
-                        background: 'linear-gradient(135deg, #0f172a, #090d16)',
-                        border: '1.5px solid rgba(56, 189, 248, 0.4)',
-                        borderRadius: '24px',
-                        padding: '28px',
-                        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(37, 99, 235, 0.3)',
-                        fontFamily: 'Inter, system-ui, sans-serif'
+                        maxWidth: '620px',
+                        background: 'linear-gradient(135deg, #0f172a 0%, #090d16 100%)',
+                        border: '2px solid rgba(56, 189, 248, 0.5)',
+                        borderRadius: '28px',
+                        padding: '36px',
+                        boxShadow: '0 30px 80px rgba(0, 0, 0, 0.95), 0 0 60px rgba(56, 189, 248, 0.35)',
+                        fontFamily: 'Inter, system-ui, sans-serif',
+                        position: 'relative'
                     }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                            <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <i className="fas fa-plus-circle" style={{ color: '#38bdf8' }}></i>
-                                Add Operational Task
-                            </h3>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '16px' }}>
+                            <div>
+                                <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '1px', textTransform: 'uppercase' }}>OPERATIONS CHECKLIST</span>
+                                <h3 style={{ margin: '4px 0 0', fontSize: '1.5rem', fontWeight: 800, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <i className="fas fa-plus-circle" style={{ color: '#38bdf8' }}></i>
+                                    Add Operational Task
+                                </h3>
+                            </div>
                             <button
                                 onClick={() => setShowAddTaskModal(false)}
-                                style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: '#94a3b8', width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
-                                <i className="fas fa-times" style={{ margin: 0 }}></i>
+                                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: '#cbd5e1', width: '38px', height: '38px', borderRadius: '12px', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
+                                <i className="fas fa-times" style={{ margin: 0, fontSize: '1rem' }}></i>
                             </button>
                         </div>
 
-                        <form onSubmit={handleAddTaskSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <form onSubmit={handleAddTaskSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Task Description / Title</label>
+                                <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>Task Title / Description</label>
                                 <input
                                     type="text"
                                     required
-                                    placeholder="e.g. Verify Speaker Wireless Microphones"
+                                    placeholder="e.g. Confirm Keynote Audio & Wireless Microphones"
                                     value={newTask.title}
                                     onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(56, 189, 248, 0.3)', color: '#ffffff', outline: 'none' }}
+                                    style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', background: 'rgba(15, 23, 42, 0.95)', border: '1.5px solid rgba(56, 189, 248, 0.4)', color: '#ffffff', fontSize: '0.95rem', outline: 'none' }}
                                 />
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Assignee Name</label>
+                                    <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>Assignee Name</label>
                                     <input
                                         type="text"
                                         placeholder="e.g. Rohan Shrestha"
                                         value={newTask.assignee}
                                         onChange={(e) => setNewTask({ ...newTask, assignee: e.target.value })}
-                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(56, 189, 248, 0.3)', color: '#ffffff', outline: 'none' }}
+                                        style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', background: 'rgba(15, 23, 42, 0.95)', border: '1.5px solid rgba(56, 189, 248, 0.4)', color: '#ffffff', fontSize: '0.95rem', outline: 'none' }}
                                     />
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Category</label>
+                                    <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>Category</label>
                                     <select
                                         value={newTask.category}
                                         onChange={(e) => setNewTask({ ...newTask, category: e.target.value })}
-                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(56, 189, 248, 0.3)', color: '#ffffff', outline: 'none' }}>
+                                        style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', background: 'rgba(15, 23, 42, 0.95)', border: '1.5px solid rgba(56, 189, 248, 0.4)', color: '#ffffff', fontSize: '0.95rem', outline: 'none' }}>
                                         <option value="Operations">Operations</option>
                                         <option value="Technical">Technical</option>
                                         <option value="Logistics">Logistics</option>
@@ -656,7 +670,10 @@ const TasksAgenda = () => {
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Initial Progress ({newTask.progress}%)</label>
+                                <label style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>
+                                    <span>Initial Progress</span>
+                                    <span style={{ color: '#38bdf8', fontWeight: 800 }}>{newTask.progress}%</span>
+                                </label>
                                 <input
                                     type="range"
                                     min="0"
@@ -664,94 +681,106 @@ const TasksAgenda = () => {
                                     step="5"
                                     value={newTask.progress}
                                     onChange={(e) => setNewTask({ ...newTask, progress: Number(e.target.value) })}
-                                    style={{ width: '100%', cursor: 'pointer' }}
+                                    style={{ width: '100%', cursor: 'pointer', height: '6px' }}
                                 />
                             </div>
 
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '14px', marginTop: '14px' }}>
                                 <button
                                     type="button"
                                     onClick={() => setShowAddTaskModal(false)}
-                                    style={{ padding: '10px 18px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', fontWeight: 600, cursor: 'pointer' }}>
+                                    style={{ padding: '12px 24px', borderRadius: '14px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)', color: '#94a3b8', fontWeight: 700, fontSize: '0.92rem', cursor: 'pointer' }}>
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    style={{ padding: '10px 22px', borderRadius: '10px', background: 'linear-gradient(135deg, #2563eb, #0284c7)', border: 'none', color: '#ffffff', fontWeight: 700, cursor: 'pointer', boxShadow: '0 0 20px rgba(37, 99, 235, 0.4)' }}>
+                                    style={{ padding: '12px 30px', borderRadius: '14px', background: 'linear-gradient(135deg, #2563eb, #0284c7)', border: 'none', color: '#ffffff', fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer', boxShadow: '0 0 25px rgba(37, 99, 235, 0.5)' }}>
                                     Create Task
                                 </button>
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
-            {/* Add Agenda Session Modal */}
-            {showAddAgendaModal && (
+            {/* PORTAL: Add Agenda Session Modal (DEAD-CENTERED & LARGE) */}
+            {showAddAgendaModal && createPortal(
                 <div style={{
                     position: 'fixed',
-                    inset: 0,
-                    zIndex: 99999,
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    zIndex: 999999,
                     background: 'rgba(5, 11, 26, 0.88)',
-                    backdropFilter: 'blur(16px)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justify: 'center',
-                    padding: '20px'
+                    backdropFilter: 'blur(20px)',
+                    display: 'grid',
+                    placeItems: 'center',
+                    placeContent: 'center',
+                    padding: '24px',
+                    boxSizing: 'border-box',
+                    margin: 0
                 }}>
                     <div style={{
                         width: '100%',
-                        maxWidth: '480px',
-                        background: 'linear-gradient(135deg, #0f172a, #090d16)',
-                        border: '1.5px solid rgba(192, 132, 252, 0.4)',
-                        borderRadius: '24px',
-                        padding: '28px',
-                        boxShadow: '0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(192, 132, 252, 0.3)',
-                        fontFamily: 'Inter, system-ui, sans-serif'
+                        maxWidth: '640px',
+                        background: 'linear-gradient(135deg, #0f172a 0%, #090d16 100%)',
+                        border: '2px solid rgba(192, 132, 252, 0.5)',
+                        borderRadius: '28px',
+                        padding: '36px',
+                        boxShadow: '0 30px 80px rgba(0, 0, 0, 0.95), 0 0 60px rgba(192, 132, 252, 0.35)',
+                        fontFamily: 'Inter, system-ui, sans-serif',
+                        position: 'relative'
                     }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                            <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <i className="fas fa-calendar-plus" style={{ color: '#c084fc' }}></i>
-                                Add Agenda Session
-                            </h3>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '16px' }}>
+                            <div>
+                                <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#c084fc', letterSpacing: '1px', textTransform: 'uppercase' }}>MASTER SCHEDULE BUILDER</span>
+                                <h3 style={{ margin: '4px 0 0', fontSize: '1.5rem', fontWeight: 800, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <i className="fas fa-calendar-plus" style={{ color: '#c084fc' }}></i>
+                                    Add Agenda Session
+                                </h3>
+                            </div>
                             <button
                                 onClick={() => setShowAddAgendaModal(false)}
-                                style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: '#94a3b8', width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
-                                <i className="fas fa-times" style={{ margin: 0 }}></i>
+                                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: '#cbd5e1', width: '38px', height: '38px', borderRadius: '12px', cursor: 'pointer', display: 'grid', placeItems: 'center' }}>
+                                <i className="fas fa-times" style={{ margin: 0, fontSize: '1rem' }}></i>
                             </button>
                         </div>
 
-                        <form onSubmit={handleAddAgendaSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <form onSubmit={handleAddAgendaSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Session Title</label>
+                                <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>Session Title</label>
                                 <input
                                     type="text"
                                     required
-                                    placeholder="e.g. CleanTech Venture Pitch"
+                                    placeholder="e.g. CleanTech & Green Energy Venture Pitch"
                                     value={newAgenda.title}
                                     onChange={(e) => setNewAgenda({ ...newAgenda, title: e.target.value })}
-                                    style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(192, 132, 252, 0.3)', color: '#ffffff', outline: 'none' }}
+                                    style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', background: 'rgba(15, 23, 42, 0.95)', border: '1.5px solid rgba(192, 132, 252, 0.4)', color: '#ffffff', fontSize: '0.95rem', outline: 'none' }}
                                 />
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Speaker Name</label>
+                                    <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>Speaker Name</label>
                                     <input
                                         type="text"
                                         placeholder="e.g. Dr. Aarav Sharma"
                                         value={newAgenda.speaker}
                                         onChange={(e) => setNewAgenda({ ...newAgenda, speaker: e.target.value })}
-                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(192, 132, 252, 0.3)', color: '#ffffff', outline: 'none' }}
+                                        style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', background: 'rgba(15, 23, 42, 0.95)', border: '1.5px solid rgba(192, 132, 252, 0.4)', color: '#ffffff', fontSize: '0.95rem', outline: 'none' }}
                                     />
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Category</label>
+                                    <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>Category</label>
                                     <select
                                         value={newAgenda.category}
                                         onChange={(e) => setNewAgenda({ ...newAgenda, category: e.target.value })}
-                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(192, 132, 252, 0.3)', color: '#ffffff', outline: 'none' }}>
+                                        style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', background: 'rgba(15, 23, 42, 0.95)', border: '1.5px solid rgba(192, 132, 252, 0.4)', color: '#ffffff', fontSize: '0.95rem', outline: 'none' }}>
                                         <option value="Keynote">Keynote</option>
                                         <option value="Workshop">Workshop</option>
                                         <option value="Pitch">Pitch</option>
@@ -762,46 +791,47 @@ const TasksAgenda = () => {
                                 </div>
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Time Schedule</label>
+                                    <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>Time Schedule</label>
                                     <input
                                         type="text"
                                         placeholder="e.g. 02:00 PM - 03:30 PM"
                                         value={newAgenda.time}
                                         onChange={(e) => setNewAgenda({ ...newAgenda, time: e.target.value })}
-                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(192, 132, 252, 0.3)', color: '#ffffff', outline: 'none' }}
+                                        style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', background: 'rgba(15, 23, 42, 0.95)', border: '1.5px solid rgba(192, 132, 252, 0.4)', color: '#ffffff', fontSize: '0.95rem', outline: 'none' }}
                                     />
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Venue Room</label>
+                                    <label style={{ display: 'block', fontSize: '0.88rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '8px' }}>Venue Room</label>
                                     <input
                                         type="text"
                                         placeholder="e.g. Grand Cyber Hall A"
                                         value={newAgenda.room}
                                         onChange={(e) => setNewAgenda({ ...newAgenda, room: e.target.value })}
-                                        style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(192, 132, 252, 0.3)', color: '#ffffff', outline: 'none' }}
+                                        style={{ width: '100%', padding: '12px 16px', borderRadius: '14px', background: 'rgba(15, 23, 42, 0.95)', border: '1.5px solid rgba(192, 132, 252, 0.4)', color: '#ffffff', fontSize: '0.95rem', outline: 'none' }}
                                     />
                                 </div>
                             </div>
 
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '14px', marginTop: '14px' }}>
                                 <button
                                     type="button"
                                     onClick={() => setShowAddAgendaModal(false)}
-                                    style={{ padding: '10px 18px', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', fontWeight: 600, cursor: 'pointer' }}>
+                                    style={{ padding: '12px 24px', borderRadius: '14px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)', color: '#94a3b8', fontWeight: 700, fontSize: '0.92rem', cursor: 'pointer' }}>
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    style={{ padding: '10px 22px', borderRadius: '10px', background: 'linear-gradient(135deg, #a855f7, #c084fc)', border: 'none', color: '#ffffff', fontWeight: 700, cursor: 'pointer', boxShadow: '0 0 20px rgba(192, 132, 252, 0.4)' }}>
+                                    style={{ padding: '12px 30px', borderRadius: '14px', background: 'linear-gradient(135deg, #9333ea, #c084fc)', border: 'none', color: '#ffffff', fontWeight: 800, fontSize: '0.95rem', cursor: 'pointer', boxShadow: '0 0 25px rgba(192, 132, 252, 0.5)' }}>
                                     Save Session
                                 </button>
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );
