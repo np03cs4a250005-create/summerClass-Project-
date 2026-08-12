@@ -1,10 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 
-// ─────────────────────────────────────────────────────────────────────
-// Gatherly Suite — Web Audio API Synthwave Background Music Engine
-// 4 Tracks: Cyber Banger | Deep Space | Neon Pulse | Void Rave
-// ─────────────────────────────────────────────────────────────────────
-
 const TRACKS = [
     { name: 'Cyber Banger', color: '#818cf8', shadow: 'rgba(129,140,248,0.8)', bpm: 130 },
     { name: 'Deep Space',   color: '#38bdf8', shadow: 'rgba(56,189,248,0.8)',   bpm: 90  },
@@ -12,7 +7,6 @@ const TRACKS = [
     { name: 'Void Rave',    color: '#a78bfa', shadow: 'rgba(167,139,250,0.8)', bpm: 155 },
 ];
 
-// Note frequencies
 const NOTE = {
     C3: 130.81, D3: 146.83, Eb3: 155.56, F3: 174.61, G3: 196.00, Ab3: 207.65, Bb3: 233.08,
     C4: 261.63, D4: 293.66, Eb4: 311.13, E4: 329.63, F4: 349.23, G4: 392.00, Ab4: 415.30,
@@ -20,9 +14,8 @@ const NOTE = {
     C5: 523.25, D5: 587.33, Eb5: 622.25, E5: 659.25, F5: 698.46, G5: 783.99, Ab5: 830.61,
 };
 
-// ─── Track Patterns ───────────────────────────────────────────────────
 const TRACK_PATTERNS = {
-    0: { // Cyber Banger
+    0: {
         bassNotes: [NOTE.C3, NOTE.C3, NOTE.G3, NOTE.Bb3, NOTE.C3, NOTE.F3, NOTE.G3, NOTE.Bb3],
         arpNotes:  [NOTE.C5, NOTE.Eb5, NOTE.G5, NOTE.Bb3*4, NOTE.C5, NOTE.F5, NOTE.G5, NOTE.Eb5],
         padNotes:  [[NOTE.C4, NOTE.Eb4, NOTE.G4], [NOTE.F4, NOTE.Ab4, NOTE.C5]],
@@ -30,7 +23,7 @@ const TRACK_PATTERNS = {
         snare:[0,0,1,0, 0,0,1,0, 0,0,1,0, 0,0,1,0],
         hihat:[1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1],
     },
-    1: { // Deep Space
+    1: {
         bassNotes: [NOTE.C3, null, NOTE.G3, null, NOTE.F3, null, NOTE.Bb3, null],
         arpNotes:  [NOTE.C5, null, NOTE.G5, null, NOTE.Eb5, null, NOTE.F5, null],
         padNotes:  [[NOTE.C4, NOTE.G4], [NOTE.F4, NOTE.C5], [NOTE.G4, NOTE.D5]],
@@ -38,7 +31,7 @@ const TRACK_PATTERNS = {
         snare:[0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0],
         hihat:[1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,0],
     },
-    2: { // Neon Pulse
+    2: {
         bassNotes: [NOTE.C3, NOTE.Eb3, NOTE.G3, NOTE.C3, NOTE.F3, NOTE.Ab3, NOTE.Bb3, NOTE.G3],
         arpNotes:  [NOTE.C5, NOTE.Eb5, NOTE.G5, NOTE.C5, NOTE.F5, NOTE.Ab5, NOTE.Bb3*4, NOTE.G5],
         padNotes:  [[NOTE.C4, NOTE.Eb4, NOTE.G4, NOTE.Bb4]],
@@ -46,7 +39,7 @@ const TRACK_PATTERNS = {
         snare:[0,1,0,1, 0,1,0,1, 0,1,0,1, 0,1,0,1],
         hihat:[1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1],
     },
-    3: { // Void Rave
+    3: {
         bassNotes: [NOTE.C3, NOTE.C3, NOTE.F3, NOTE.G3, NOTE.Ab3, NOTE.G3, NOTE.F3, NOTE.C3],
         arpNotes:  [NOTE.C5, NOTE.Eb5, NOTE.F5, NOTE.G5, NOTE.Ab5, NOTE.G5, NOTE.F5, NOTE.Eb5],
         padNotes:  [[NOTE.C4, NOTE.Eb4, NOTE.Ab4], [NOTE.F4, NOTE.Ab4, NOTE.C5], [NOTE.G4, NOTE.Bb4, NOTE.D5]],
@@ -56,7 +49,6 @@ const TRACK_PATTERNS = {
     },
 };
 
-// ─── Audio Synthesis Helpers ──────────────────────────────────────────
 function createReverb(actx, decay = 2.5) {
     const convolver = actx.createConvolver();
     const rate = actx.sampleRate;
@@ -84,7 +76,6 @@ function playKick(actx, dst, when) {
 }
 
 function playSnare(actx, dst, when) {
-    // Noise burst
     const bufLen = actx.sampleRate * 0.12;
     const buf = actx.createBuffer(1, bufLen, actx.sampleRate);
     const d = buf.getChannelData(0);
@@ -100,7 +91,6 @@ function playSnare(actx, dst, when) {
     gain.gain.exponentialRampToValueAtTime(0.001, when + 0.12);
     src.start(when); src.stop(when + 0.12);
 
-    // Snare tone
     const toneOsc = actx.createOscillator();
     const toneGain = actx.createGain();
     toneOsc.connect(toneGain); toneGain.connect(dst);
@@ -164,14 +154,14 @@ function playArp(actx, dst, reverb, freq, when, dur) {
 }
 
 function playPad(actx, dst, reverb, freqs, when, dur) {
-    freqs.forEach((freq, i) => {
+    freqs.forEach((freq) => {
         const osc1 = actx.createOscillator();
         const osc2 = actx.createOscillator();
         const gain = actx.createGain();
         const rvGain = actx.createGain();
         osc1.type = 'sine'; osc2.type = 'sine';
         osc1.frequency.setValueAtTime(freq, when);
-        osc2.frequency.setValueAtTime(freq * 1.003, when); // Detune for chorus
+        osc2.frequency.setValueAtTime(freq * 1.003, when);
         osc1.connect(gain); osc2.connect(gain);
         gain.connect(dst);
         osc1.connect(rvGain); osc2.connect(rvGain); rvGain.connect(reverb);
@@ -188,8 +178,7 @@ function playPad(actx, dst, reverb, freqs, when, dur) {
     });
 }
 
-// ─── Main Component ────────────────────────────────────────────────────
-const BackgroundMusic = () => {
+const BackgroundMusic = ({ embedMode = false }) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTrack, setCurrentTrack] = useState(0);
     const [volume, setVolume] = useState(0.45);
@@ -209,7 +198,7 @@ const BackgroundMusic = () => {
     const track = TRACKS[currentTrack];
     const pattern = TRACK_PATTERNS[currentTrack];
     const bps = track.bpm / 60;
-    const stepDur = 1 / bps / 4; // 16th note
+    const stepDur = 1 / bps / 4;
 
     const initAudio = useCallback(() => {
         if (!actxRef.current) {
@@ -236,20 +225,16 @@ const BackgroundMusic = () => {
             const bassNote = p.bassNotes[step % p.bassNotes.length];
             const arpNote = p.arpNotes[step % p.arpNotes.length];
 
-            // Drums
             if (p.kick[step]) playKick(actx, master, when);
             if (p.snare[step]) playSnare(actx, master, when);
             if (p.hihat[step]) playHihat(actx, master, when, step % 8 === 4);
 
-            // Bass (every 2 steps)
             if (step % 2 === 0) {
                 playBass(actx, master, bassNote, when, stepDur * 1.8);
             }
 
-            // Arpeggio
             playArp(actx, master, reverb, arpNote, when, stepDur * 0.9);
 
-            // Pad (every bar = 16 steps)
             if (step === 0) {
                 const padChord = p.padNotes[Math.floor(stepRef.current / 16) % p.padNotes.length];
                 playPad(actx, reverb, reverb, padChord, when, stepDur * 14);
@@ -261,7 +246,6 @@ const BackgroundMusic = () => {
         }
     }, [currentTrack, stepDur]);
 
-    // Visualizer animation
     useEffect(() => {
         if (!isPlaying) {
             setVisualizer(Array(16).fill(0));
@@ -273,7 +257,6 @@ const BackgroundMusic = () => {
         return () => clearInterval(iv);
     }, [isPlaying]);
 
-    // Scheduler loop
     useEffect(() => {
         if (isPlaying) {
             schedulerRef.current = setInterval(scheduleStep, lookahead * 1000);
@@ -283,7 +266,6 @@ const BackgroundMusic = () => {
         return () => clearInterval(schedulerRef.current);
     }, [isPlaying, scheduleStep]);
 
-    // Volume sync
     useEffect(() => {
         if (masterGainRef.current) masterGainRef.current.gain.value = volume;
     }, [volume]);
@@ -303,36 +285,96 @@ const BackgroundMusic = () => {
         if (actxRef.current) nextNoteRef.current = actxRef.current.currentTime + 0.05;
     };
 
+    const containerStyle = embedMode ? {
+        position: 'relative',
+        display: 'inline-flex',
+        alignItems: 'center',
+        flexShrink: 0,
+        zIndex: 9999,
+        fontFamily: "'Inter', 'Outfit', sans-serif",
+    } : {
+        position: 'fixed',
+        top: '15px',
+        right: '15px',
+        zIndex: 99999,
+        fontFamily: "'Inter', 'Outfit', sans-serif",
+    };
+
     return (
-        <div style={{
-            position: 'fixed',
-            bottom: '24px',
-            right: '24px',
-            zIndex: 9999,
-            fontFamily: "'Inter', 'Outfit', sans-serif",
-        }}>
-            {/* Expanded Panel */}
+        <div style={containerStyle}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <button
+                    onClick={togglePlay}
+                    title={isPlaying ? "Pause Synthwave Music" : "Play Synthwave Background Music"}
+                    style={{
+                        height: '36px',
+                        padding: '0 12px',
+                        borderRadius: '10px',
+                        background: isPlaying
+                            ? `linear-gradient(135deg, ${track.color}44, ${track.color}22)`
+                            : 'rgba(15, 23, 42, 0.8)',
+                        border: `1.5px solid ${isPlaying ? track.color : 'rgba(56, 189, 248, 0.3)'}`,
+                        cursor: 'pointer',
+                        color: isPlaying ? '#ffffff' : '#94a3b8',
+                        fontSize: '0.8rem',
+                        fontWeight: 700,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        boxShadow: isPlaying ? `0 0 15px ${track.shadow}` : 'none',
+                        transition: 'all 0.25s ease',
+                        whiteSpace: 'nowrap'
+                    }}>
+                    <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-music'}`} style={{ fontSize: '0.85rem', color: track.color }}></i>
+                    <span>{isPlaying ? track.name : 'Music'}</span>
+                </button>
+
+                <button
+                    onClick={() => setIsExpanded(p => !p)}
+                    title="Toggle Music Tracks & Volume"
+                    style={{
+                        width: '36px',
+                        height: '36px',
+                        borderRadius: '10px',
+                        background: 'rgba(15, 23, 42, 0.8)',
+                        border: `1px solid ${track.color}55`,
+                        cursor: 'pointer',
+                        color: track.color,
+                        fontSize: '0.85rem',
+                        fontWeight: 700,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justify: 'center',
+                        transition: 'all 0.2s',
+                        boxShadow: isExpanded ? `0 0 15px ${track.color}44` : 'none',
+                    }}>
+                    {isExpanded ? '▾' : '♬'}
+                </button>
+            </div>
+
             {isExpanded && (
                 <div style={{
-                    background: 'rgba(8, 10, 24, 0.92)',
+                    position: 'absolute',
+                    top: '44px',
+                    right: 0,
+                    background: 'rgba(8, 10, 24, 0.96)',
                     backdropFilter: 'blur(24px)',
                     border: `1px solid ${track.color}55`,
-                    borderRadius: '20px',
-                    padding: '20px',
-                    marginBottom: '12px',
-                    width: '280px',
-                    boxShadow: `0 0 40px ${track.color}33, 0 8px 32px rgba(0,0,0,0.6)`,
-                    animation: 'fadeUpIn 0.3s ease',
+                    borderRadius: '18px',
+                    padding: '18px',
+                    width: '270px',
+                    boxShadow: `0 0 40px ${track.color}33, 0 12px 40px rgba(0,0,0,0.95)`,
+                    animation: 'fadeDownIn 0.25s ease',
+                    zIndex: 99999
                 }}>
-                    {/* Track title + visualizer */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
                         <div style={{
                             width: '10px', height: '10px', borderRadius: '50%',
                             background: track.color,
                             boxShadow: `0 0 12px ${track.color}`,
                             animation: isPlaying ? 'pulse 1s infinite' : 'none',
                         }} />
-                        <span style={{ color: '#fff', fontWeight: 700, fontSize: '14px', letterSpacing: '0.5px' }}>
+                        <span style={{ color: '#fff', fontWeight: 700, fontSize: '13px', letterSpacing: '0.5px' }}>
                             {track.name}
                         </span>
                         <span style={{ color: track.color, fontSize: '11px', marginLeft: 'auto', opacity: 0.8 }}>
@@ -340,10 +382,9 @@ const BackgroundMusic = () => {
                         </span>
                     </div>
 
-                    {/* Waveform Visualizer */}
                     <div style={{
                         display: 'flex', gap: '3px', alignItems: 'flex-end',
-                        height: '40px', marginBottom: '16px',
+                        height: '36px', marginBottom: '14px',
                         padding: '0 2px',
                     }}>
                         {visualizer.map((h, i) => (
@@ -359,8 +400,7 @@ const BackgroundMusic = () => {
                         ))}
                     </div>
 
-                    {/* Track Selector */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '14px' }}>
                         {TRACKS.map((t, i) => (
                             <button key={i} onClick={() => switchTrack(i)} style={{
                                 background: currentTrack === i
@@ -368,7 +408,7 @@ const BackgroundMusic = () => {
                                     : 'rgba(255,255,255,0.03)',
                                 border: `1px solid ${currentTrack === i ? t.color + '88' : '#ffffff15'}`,
                                 borderRadius: '10px',
-                                padding: '8px 12px',
+                                padding: '7px 10px',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -389,9 +429,8 @@ const BackgroundMusic = () => {
                         ))}
                     </div>
 
-                    {/* Volume Slider */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <span style={{ fontSize: '14px' }}>🔊</span>
+                        <span style={{ fontSize: '13px' }}>🔊</span>
                         <input
                             type="range" min="0" max="1" step="0.01"
                             value={volume}
@@ -410,50 +449,9 @@ const BackgroundMusic = () => {
                 </div>
             )}
 
-            {/* Main Control Button */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-                {/* Expand toggle */}
-                <button onClick={() => setIsExpanded(p => !p)} style={{
-                    width: '42px', height: '42px',
-                    borderRadius: '12px',
-                    background: 'rgba(8, 10, 24, 0.88)',
-                    border: `1px solid ${track.color}44`,
-                    cursor: 'pointer',
-                    color: '#888',
-                    fontSize: '16px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    backdropFilter: 'blur(12px)',
-                    transition: 'all 0.2s',
-                    boxShadow: isExpanded ? `0 0 20px ${track.color}33` : 'none',
-                }}>
-                    {isExpanded ? '▾' : '♬'}
-                </button>
-
-                {/* Play / Pause */}
-                <button onClick={togglePlay} style={{
-                    width: '52px', height: '52px',
-                    borderRadius: '16px',
-                    background: isPlaying
-                        ? `linear-gradient(135deg, ${track.color}, ${track.color}aa)`
-                        : `linear-gradient(135deg, rgba(99,102,241,0.3), rgba(56,189,248,0.2))`,
-                    border: `2px solid ${track.color}`,
-                    cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '20px',
-                    boxShadow: isPlaying
-                        ? `0 0 28px ${track.shadow}, 0 0 12px ${track.color}55`
-                        : `0 4px 16px rgba(0,0,0,0.5)`,
-                    transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    transform: isPlaying ? 'scale(1.08)' : 'scale(1)',
-                    backdropFilter: 'blur(16px)',
-                }}>
-                    {isPlaying ? '⏸' : '▶'}
-                </button>
-            </div>
-
             <style>{`
-                @keyframes fadeUpIn {
-                    from { opacity: 0; transform: translateY(12px); }
+                @keyframes fadeDownIn {
+                    from { opacity: 0; transform: translateY(-8px); }
                     to   { opacity: 1; transform: translateY(0); }
                 }
                 @keyframes pulse {

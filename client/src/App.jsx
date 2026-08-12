@@ -8,6 +8,7 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import ParticleCanvas from './components/ParticleCanvas';
 import BackgroundMusic from './components/BackgroundMusic';
+import VoiceAIAssistant from './components/VoiceAIAssistant';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -17,7 +18,6 @@ import EventsHub from './pages/EventsHub';
 import Venues from './pages/Venues';
 import Attendees from './pages/Attendees';
 import Tickets from './pages/Tickets';
-import RegistrationPortal from './pages/RegistrationPortal';
 import CalendarView from './pages/CalendarView';
 import Reports from './pages/Reports';
 import Communications from './pages/Communications';
@@ -54,7 +54,6 @@ const Layout = ({ children }) => {
             '/venues': 'Venues & Locations',
             '/attendees': 'Attendee Registry & Imports',
             '/tickets': 'Tickets & Digital Issuance',
-            '/registration': 'Registration Portal',
             '/calendar': 'Interactive Calendar',
             '/reports': 'Reports & Analytics',
             '/communications': 'Communications & Email',
@@ -93,6 +92,7 @@ const Layout = ({ children }) => {
                     <p>&copy; 2026 Gatherly Suite — Enterprise Event Platform</p>
                 </footer>
             </div>
+            <VoiceAIAssistant />
         </div>
     );
 };
@@ -108,7 +108,6 @@ const AppRoutes = () => (
         <Route path="/venues" element={<ProtectedRoute><Layout><Venues /></Layout></ProtectedRoute>} />
         <Route path="/attendees" element={<ProtectedRoute><Layout><Attendees /></Layout></ProtectedRoute>} />
         <Route path="/tickets" element={<ProtectedRoute><Layout><Tickets /></Layout></ProtectedRoute>} />
-        <Route path="/registration" element={<ProtectedRoute><Layout><RegistrationPortal /></Layout></ProtectedRoute>} />
         <Route path="/calendar" element={<ProtectedRoute><Layout><CalendarView /></Layout></ProtectedRoute>} />
         <Route path="/reports" element={<ProtectedRoute><Layout><Reports /></Layout></ProtectedRoute>} />
         <Route path="/communications" element={<ProtectedRoute><Layout><Communications /></Layout></ProtectedRoute>} />
@@ -141,7 +140,6 @@ const App = () => {
         <AuthProvider>
             <ToastProvider>
                 <AppRoutes />
-                <BackgroundMusic />
             </ToastProvider>
         </AuthProvider>
     );

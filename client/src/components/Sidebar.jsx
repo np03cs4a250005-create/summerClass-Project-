@@ -9,7 +9,6 @@ const adminMenuItems = [
     { path: '/venues', icon: 'fa-map-marked-alt', label: 'Venues & Seating' },
     { path: '/attendees', icon: 'fa-users', label: 'Attendee Registry' },
     { path: '/tickets', icon: 'fa-ticket-alt', label: 'Ticket Tiers & Passes' },
-    { path: '/registration', icon: 'fa-user-check', label: 'Registration Approval' },
     { path: '/calendar', icon: 'fa-calendar-week', label: 'Master Calendar' },
     { path: '/reports', icon: 'fa-chart-line', label: 'Reports & Real Export' },
     { path: '/communications', icon: 'fa-bell', label: 'Communications & Email' },

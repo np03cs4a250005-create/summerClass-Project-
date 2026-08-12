@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ParticleCanvas from '../components/ParticleCanvas';
 import CyberArcadeGame from '../components/CyberArcadeGame';
+import DemoVideoPlayer from '../components/DemoVideoPlayer';
+import VoiceAIAssistant from '../components/VoiceAIAssistant';
+import SwipableStepCards from '../components/SwipableStepCards';
+import SwipableFeatureCards from '../components/SwipableFeatureCards';
 
 const Home = () => {
     const [activeTab, setActiveTab] = useState('qr');
     const [showGameModal, setShowGameModal] = useState(false);
+    const [showVideoModal, setShowVideoModal] = useState(false);
 
     return (
         <div className="home-layout" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden', background: 'radial-gradient(ellipse at 50% -10%, #0d2a5d 0%, #081533 45%, #050b1a 100%)', color: '#f8fafc' }}>
@@ -31,6 +36,14 @@ const Home = () => {
                     <a href="#how-it-works" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 500, transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#38bdf8'} onMouseOut={(e) => e.target.style.color = '#94a3b8'}>How It Works</a>
                     <a href="#features" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 500, transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#38bdf8'} onMouseOut={(e) => e.target.style.color = '#94a3b8'}>Features</a>
                     
+                    {/* Prominent Voice AI Assistant Button in Top Nav */}
+                    <button onClick={() => {
+                        const orbBtn = document.querySelector('.voice-assistant-orb-btn button');
+                        if (orbBtn) orbBtn.click();
+                    }} style={{ padding: '8px 18px', borderRadius: '10px', background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.3), rgba(56, 189, 248, 0.2))', border: '1px solid rgba(56, 189, 248, 0.6)', color: '#38bdf8', fontSize: '0.9rem', fontWeight: 800, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', boxShadow: '0 0 18px rgba(56,189,248,0.3)' }}>
+                        <i className="fas fa-headset" style={{ color: '#38bdf8' }}></i> AI Voice Assistant
+                    </button>
+
                     {/* Interactive Arcade Game Button */}
                     <button onClick={() => setShowGameModal(true)} style={{ padding: '8px 16px', borderRadius: '10px', background: 'rgba(251, 191, 36, 0.15)', border: '1px solid rgba(251, 191, 36, 0.4)', color: '#fbbf24', fontSize: '0.9rem', fontWeight: 700, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', boxShadow: '0 0 15px rgba(251,191,36,0.2)' }}>
                         <i className="fas fa-gamepad"></i> Play Arcade Game vs AI
@@ -57,6 +70,30 @@ const Home = () => {
                     From seamless guest check-ins to instant QR tickets and live community chats — Gatherly gives you everything you need to create unforgettable gatherings.
                 </p>
 
+                {/* Super Eye-Catching Voice AI Interactive Hero Banner */}
+                <div style={{ maxWidth: '820px', margin: '0 auto 36px', padding: '16px 24px', borderRadius: '20px', background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(14, 165, 233, 0.15))', border: '1.5px solid rgba(56, 189, 248, 0.45)', boxShadow: '0 15px 35px rgba(0, 0, 0, 0.4), 0 0 30px rgba(37, 99, 235, 0.35)', backdropFilter: 'blur(12px)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', textAlign: 'left' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, #0284c7, #2563eb)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '1.3rem', boxShadow: '0 0 20px rgba(56, 189, 248, 0.6)' }}>
+                            <i className="fas fa-microphone fa-bounce"></i>
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                Gatherly Voice AI Assistant is Active!
+                                <span style={{ background: 'rgba(56, 189, 248, 0.2)', border: '1px solid #38bdf8', color: '#38bdf8', fontSize: '0.72rem', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>VOICE READY</span>
+                            </div>
+                            <div style={{ fontSize: '0.85rem', color: '#cbd5e1', marginTop: '2px' }}>
+                                Tap to speak or ask: <em>"What does Gatherly mean?"</em> or <em>"Take me to tickets"</em>
+                            </div>
+                        </div>
+                    </div>
+                    <button onClick={() => {
+                        const orbBtn = document.querySelector('.voice-assistant-orb-btn button');
+                        if (orbBtn) orbBtn.click();
+                    }} style={{ padding: '10px 22px', borderRadius: '12px', background: 'linear-gradient(135deg, #2563eb, #0284c7)', border: 'none', color: '#fff', fontSize: '0.92rem', fontWeight: 700, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px', boxShadow: '0 0 20px rgba(37, 99, 235, 0.6)' }}>
+                        <i className="fas fa-headset"></i> Talk to Voice AI
+                    </button>
+                </div>
+
                 <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '50px' }}>
                     <Link to="/signup" className="btn blue-glow-btn btn-lg" style={{ padding: '15px 36px', fontSize: '1.05rem', borderRadius: '12px', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
                         <i className="fas fa-sparkles"></i> Host Your First Event
@@ -64,9 +101,13 @@ const Home = () => {
                     <button onClick={() => setShowGameModal(true)} className="btn btn-secondary btn-lg" style={{ padding: '15px 32px', fontSize: '1.05rem', borderRadius: '12px', background: 'rgba(251, 191, 36, 0.15)', color: '#fbbf24', border: '1px solid rgba(251, 191, 36, 0.4)', backdropFilter: 'blur(10px)', display: 'inline-flex', alignItems: 'center', gap: '10px', fontWeight: 700 }}>
                         <i className="fas fa-gamepad" style={{ color: '#fbbf24' }}></i> Play Arcade vs Computer AI
                     </button>
-                    <Link to="/login" className="btn btn-secondary btn-lg" style={{ padding: '15px 32px', fontSize: '1.05rem', borderRadius: '12px', background: 'rgba(255, 255, 255, 0.05)', color: '#e2e8f0', border: '1px solid rgba(255, 255, 255, 0.12)', backdropFilter: 'blur(10px)', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-                        <i className="fas fa-play-circle" style={{ color: '#38bdf8' }}></i> Explore Demo
-                    </Link>
+                    <button onClick={() => {
+                        setShowVideoModal(true);
+                        const demoSec = document.getElementById('explore-demo-video-section');
+                        if (demoSec) demoSec.scrollIntoView({ behavior: 'smooth' });
+                    }} className="btn btn-secondary btn-lg" style={{ padding: '15px 32px', fontSize: '1.05rem', borderRadius: '12px', background: 'rgba(56, 189, 248, 0.12)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.4)', backdropFilter: 'blur(10px)', display: 'inline-flex', alignItems: 'center', gap: '10px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 0 20px rgba(56,189,248,0.2)' }}>
+                        <i className="fas fa-circle-play" style={{ color: '#38bdf8', fontSize: '1.2rem' }}></i> Explore Demo Video
+                    </button>
                 </div>
 
                 {/* Interactive Platform Feature Showcase Card */}
@@ -220,6 +261,22 @@ const Home = () => {
                 </div>
             </header>
 
+            {/* Dedicated Demo Video Section - What This Website Means */}
+            <section id="explore-demo-video-section" style={{ zIndex: 5, maxWidth: '1050px', margin: '0 auto 70px', width: '100%', padding: '0 20px', textAlign: 'center' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(56, 189, 248, 0.1)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: '20px', padding: '6px 18px', marginBottom: '16px' }}>
+                    <i className="fas fa-video" style={{ color: '#38bdf8' }}></i>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#7dd3fc', letterSpacing: '0.5px' }}>OFFICIAL PLATFORM DEMO VIDEO</span>
+                </div>
+                <h2 className="blue-text-shimmer" style={{ fontSize: '2.4rem', fontWeight: 800, marginBottom: '12px' }}>
+                    What Gatherly Actually Means
+                </h2>
+                <p style={{ color: '#94a3b8', fontSize: '1.08rem', maxWidth: '720px', margin: '0 auto 32px', lineHeight: 1.6 }}>
+                    Watch this quick walkthrough video to see how Gatherly transforms event organizing — from instant QR ticketing & entrance check-ins to live attendee chat and real-time dashboard analytics.
+                </p>
+
+                <DemoVideoPlayer autoPlay={false} />
+            </section>
+
             {/* Impact & Community Stats */}
             <section style={{ zIndex: 5, maxWidth: '1100px', margin: '0 auto 70px', width: '100%', padding: '0 20px' }}>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
@@ -247,29 +304,12 @@ const Home = () => {
                     Designed so you can launch your event page and welcome attendees effortlessly.
                 </p>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: '28px' }}>
-                    {[
-                        { step: '01', title: 'Create & Customize', desc: 'Set up your event title, schedule, venue map, and ticket types in just a few clicks.', icon: 'fa-pen-sparkles' },
-                        { step: '02', title: 'Send Smart QR Passes', desc: 'Attendees register online and instantly receive dynamic digital badges on their devices.', icon: 'fa-qrcode' },
-                        { step: '03', title: 'Welcome Your Community', desc: 'Scan passes at entry with high precision while watching live check-in stats update.', icon: 'fa-users-gear' },
-                    ].map((s, idx) => (
-                        <div key={idx} className="blue-card-glass" style={{ padding: '32px 24px', borderRadius: '20px', textAlign: 'left', position: 'relative' }}>
-                            <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#38bdf8', letterSpacing: '2px', marginBottom: '16px', background: 'rgba(56, 189, 248, 0.1)', display: 'inline-block', padding: '4px 12px', borderRadius: '20px' }}>
-                                STEP {s.step}
-                            </div>
-                            <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(37, 99, 235, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
-                                <i className={`fas ${s.icon}`} style={{ fontSize: '1.4rem', color: '#38bdf8' }}></i>
-                            </div>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '10px', color: '#f8fafc' }}>{s.title}</h3>
-                            <p style={{ color: '#94a3b8', fontSize: '0.93rem', lineHeight: 1.6, margin: 0 }}>{s.desc}</p>
-                        </div>
-                    ))}
-                </div>
+                <SwipableStepCards />
             </section>
 
             {/* Platform Features Grid */}
             <section id="features" style={{ zIndex: 5, maxWidth: '1200px', margin: '0 auto 80px', width: '100%', padding: '0 20px' }}>
-                <div style={{ textAlign: 'center', marginBottom: '45px' }}>
+                <div style={{ textAlign: 'center', marginBottom: '36px' }}>
                     <h2 className="blue-text-shimmer" style={{ fontSize: '2.4rem', fontWeight: 800, marginBottom: '12px' }}>
                         Everything You Need to Host Great Events
                     </h2>
@@ -278,24 +318,7 @@ const Home = () => {
                     </p>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-                    {[
-                        { icon: 'fa-calendar-days', title: 'Complete Event Control', desc: 'Manage single or recurring events, venues, speaker tags, and registration limits.' },
-                        { icon: 'fa-id-badge', title: 'Digital QR Passes', desc: 'Instant QR badges for seamless check-in and attendance certificate issuing.' },
-                        { icon: 'fa-chart-line', title: 'Live Dashboard', desc: 'Track real-time check-ins, remaining capacity, ticket revenue, and organizer logs.' },
-                        { icon: 'fa-user-group', title: 'Guest Management', desc: 'Search, filter, approve, and export your entire guest list anytime in CSV.' },
-                        { icon: 'fa-comments', title: 'Community Live Chat', desc: 'Facilitate real-time attendee networking, announcements, and Q&A sessions.' },
-                        { icon: 'fa-shield-halved', title: 'Reliable Security', desc: 'Built-in security logs, role access, and data protection for event safety.' },
-                    ].map((f, i) => (
-                        <div key={i} className="blue-card-glass hover-lift" style={{ padding: '28px', textAlign: 'left', borderRadius: '20px' }}>
-                            <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(56, 189, 248, 0.1))', border: '1px solid rgba(56, 189, 248, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-                                <i className={`fas ${f.icon}`} style={{ fontSize: '1.5rem', color: '#38bdf8' }}></i>
-                            </div>
-                            <h3 style={{ marginBottom: '10px', fontSize: '1.2rem', fontWeight: 700, color: '#f8fafc' }}>{f.title}</h3>
-                            <p style={{ color: '#94a3b8', fontSize: '0.93rem', lineHeight: 1.6, margin: 0 }}>{f.desc}</p>
-                        </div>
-                    ))}
-                </div>
+                <SwipableFeatureCards />
             </section>
 
             {/* Authentic Organizer Testimonials */}
@@ -359,6 +382,28 @@ const Home = () => {
 
             {/* Cyber Arcade Mini-Game Modal */}
             {showGameModal && <CyberArcadeGame onClose={() => setShowGameModal(false)} />}
+
+            {/* Video Modal Popup when Explore Demo is clicked */}
+            {showVideoModal && (
+                <div style={{
+                    position: 'fixed',
+                    inset: 0,
+                    zIndex: 9999,
+                    background: 'rgba(5, 11, 26, 0.88)',
+                    backdropFilter: 'blur(16px)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justify: 'center',
+                    padding: '20px'
+                }} onClick={(e) => {
+                    if (e.target === e.currentTarget) setShowVideoModal(false);
+                }}>
+                    <DemoVideoPlayer autoPlay={true} isModal={true} onClose={() => setShowVideoModal(false)} />
+                </div>
+            )}
+
+            {/* AI Voice Assistant Widget */}
+            <VoiceAIAssistant />
         </div>
     );
 };
