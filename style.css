@@ -811,51 +811,33 @@ textarea.input-error {
     cursor: not-allowed;
 }
 
-.btn-sm {
-    padding: 9px 18px;
-    font-size: 0.85rem;
-    border-radius: 10px;
-}
-
-.btn-icon {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 10px;
+.btn-icon, .btn-icon-circle, button.btn-icon, a.btn-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
     transition: var(--transition);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-icon:hover {
-    background: rgba(129, 140, 248, 0.08);
-    transform: scale(1.1);
-}
-
-.btn-icon i {
-    font-size: 1.1rem;
-}
-
-.btn-icon-circle {
-    background: rgba(129, 140, 248, 0.04);
-    border: 1px solid var(--border-color);
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
     cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition);
 }
 
-.btn-icon-circle:hover {
-    background: rgba(129, 140, 248, 0.12);
-    border-color: var(--border-hover);
-    transform: scale(1.12);
-    box-shadow: 0 0 15px rgba(129, 140, 248, 0.15);
+.btn-icon:hover, .btn-icon-circle:hover {
+    background: rgba(129, 140, 248, 0.15) !important;
+    transform: scale(1.08);
+}
+
+.btn-icon i, .btn-icon-circle i, button.btn-icon i, a.btn-icon i {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    text-align: center !important;
 }
 
 /* ─── Hover Lift ─── */

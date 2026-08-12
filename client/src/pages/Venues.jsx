@@ -13,7 +13,8 @@ const DEFAULT_VENUES = [
         hallLayout: 'Auditorium Style (500 seats)',
         parkingInfo: '500 vehicle spots in subterranean garage + EV Chargers',
         coverUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
-        rentPrice: 3500
+        rentPrice: 3500,
+        tags: ['Wi-Fi 6E', '4K LED Wall', 'VIP Lounge', 'Solar AC']
     },
     {
         id: 'v-2',
@@ -25,7 +26,8 @@ const DEFAULT_VENUES = [
         hallLayout: 'Exhibition & Gallery Flex Layout',
         parkingInfo: 'Valet parking & 150 dedicated street parking bays',
         coverUrl: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80',
-        rentPrice: 2800
+        rentPrice: 2800,
+        tags: ['Projection Mapping', 'Catering Kitchen', 'Gallery Flex', 'Valet']
     },
     {
         id: 'v-3',
@@ -37,7 +39,8 @@ const DEFAULT_VENUES = [
         hallLayout: 'Outdoor Tiered Amphitheater',
         parkingInfo: '100 Eco & EV charging priority parking spots',
         coverUrl: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
-        rentPrice: 1900
+        rentPrice: 1900,
+        tags: ['Solar Powered', 'Open-Air Stage', 'EV Charging', 'Eco Amphitheater']
     },
     {
         id: 'v-4',
@@ -49,7 +52,8 @@ const DEFAULT_VENUES = [
         hallLayout: 'Banquet & Round Table Executive Layout',
         parkingInfo: '300 Underground VIP Valet parking spaces',
         coverUrl: 'https://images.unsplash.com/photo-1431540015161-0bf868a2d407?auto=format&fit=crop&w=800&q=80',
-        rentPrice: 4200
+        rentPrice: 4200,
+        tags: ['360° Panoramic View', 'VIP Suites', 'Crystal Sound', 'Helipad Access']
     }
 ];
 
@@ -67,10 +71,10 @@ const Venues = () => {
         capacity: 250,
         isIndoor: true,
         hallLayout: 'Auditorium Style',
-        facilities: 'Wi-Fi, Audio System, Stage',
-        parkingInfo: 'Available on site',
+        facilities: 'Wi-Fi 6E, Audio System, Stage Lighting',
+        parkingInfo: 'On-site vehicle parking available',
         mapUrl: '',
-        rentPrice: 2000
+        rentPrice: 2500
     });
 
     const loadVenues = async () => {
@@ -84,11 +88,12 @@ const Venues = () => {
                     capacity: v.capacity || 250,
                     isIndoor: v.isIndoor !== undefined ? Boolean(v.isIndoor) : true,
                     mapUrl: v.mapUrl || 'https://maps.google.com',
-                    facilities: v.facilities || 'High-Speed Wi-Fi, Stage Lighting, Audio System',
+                    facilities: v.facilities || 'High-Speed Wi-Fi 6E, Stage Lighting, Full Sound System',
                     hallLayout: v.hallLayout || 'Auditorium Style',
                     parkingInfo: v.parkingInfo || 'On-site vehicle parking available',
                     coverUrl: v.coverUrl || DEFAULT_VENUES[i % DEFAULT_VENUES.length].coverUrl,
-                    rentPrice: v.rentPrice || 2500
+                    rentPrice: v.rentPrice || 2500,
+                    tags: ['Wi-Fi 6E', 'AV Certified', 'Stage Lighting', 'VIP Ready']
                 }));
                 setVenues(mapped);
             } else {
@@ -115,22 +120,23 @@ const Venues = () => {
             capacity: Number(newVenue.capacity) || 200,
             isIndoor: Boolean(newVenue.isIndoor),
             hallLayout: newVenue.hallLayout || 'Auditorium Style',
-            facilities: newVenue.facilities || 'Wi-Fi, Stage Lighting, Audio System',
+            facilities: newVenue.facilities || 'Wi-Fi 6E, Audio System, Stage Lighting',
             parkingInfo: newVenue.parkingInfo || 'On-site vehicle parking available',
             mapUrl: newVenue.mapUrl || `https://maps.google.com/?q=${encodeURIComponent(newVenue.name)}`,
             coverUrl: DEFAULT_VENUES[venues.length % DEFAULT_VENUES.length].coverUrl,
-            rentPrice: Number(newVenue.rentPrice) || 2000
+            rentPrice: Number(newVenue.rentPrice) || 2500,
+            tags: ['Custom Venue', 'AV Ready', 'VIP Access']
         };
 
         try {
             await venuesAPI.create(created);
         } catch {
-            // local update
+            // local update fallback
         }
 
         setVenues(prev => [created, ...prev]);
         setIsAddModalOpen(false);
-        setNewVenue({ name: '', capacity: 250, isIndoor: true, hallLayout: 'Auditorium Style', facilities: 'Wi-Fi, Audio System, Stage', parkingInfo: 'Available on site', mapUrl: '', rentPrice: 2000 });
+        setNewVenue({ name: '', capacity: 250, isIndoor: true, hallLayout: 'Auditorium Style', facilities: 'Wi-Fi 6E, Audio System, Stage Lighting', parkingInfo: 'On-site vehicle parking available', mapUrl: '', rentPrice: 2500 });
         showToast(`Venue "${created.name}" added successfully!`, 'success');
     };
 
@@ -157,10 +163,11 @@ const Venues = () => {
     });
 
     const totalCapacity = venues.reduce((sum, v) => sum + (v.capacity || 0), 0);
+    const avgRentPrice = venues.length > 0 ? Math.round(venues.reduce((sum, v) => sum + (v.rentPrice || 2500), 0) / venues.length) : 2500;
 
     return (
         <div style={{ maxWidth: '1280px', margin: '0 auto', fontFamily: 'Inter, system-ui, sans-serif' }}>
-            {/* Header Title & Actions */}
+            {/* Header Title & Action Bar */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
                 <div>
                     <h2 style={{ fontSize: '2.1rem', fontWeight: 800, margin: 0, background: 'linear-gradient(135deg, #f8fafc, #38bdf8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -168,7 +175,7 @@ const Venues = () => {
                         Venues & Seating Hub
                     </h2>
                     <p style={{ margin: '4px 0 0', color: '#94a3b8', fontSize: '0.95rem' }}>
-                        Explore event halls, inspect hall seating configurations, and manage venue reservations.
+                        Explore event halls, inspect seating layout configurations, and reserve world-class venues.
                     </p>
                 </div>
 
@@ -194,35 +201,45 @@ const Venues = () => {
                 </div>
             </div>
 
-            {/* KPI Metric Chips */}
+            {/* Top KPI Analytics Banner */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-                <div style={{ background: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '18px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#38bdf8', fontSize: '1.3rem' }}>
+                <div style={{ background: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: '18px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#38bdf8', fontSize: '1.3rem', flexShrink: 0 }}>
                         <i className="fas fa-landmark"></i>
                     </div>
                     <div>
                         <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>Active Venues</div>
-                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc' }}>{venues.length} Halls</div>
+                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc' }}>{venues.length} Facilities</div>
                     </div>
                 </div>
 
-                <div style={{ background: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(52, 211, 153, 0.25)', borderRadius: '18px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(52, 211, 153, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#34d399', fontSize: '1.3rem' }}>
-                        <i className="fas fa-users-between-lines"></i>
+                <div style={{ background: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(52, 211, 153, 0.25)', borderRadius: '18px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(52, 211, 153, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#34d399', fontSize: '1.3rem', flexShrink: 0 }}>
+                        <i className="fas fa-chair"></i>
                     </div>
                     <div>
-                        <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>Combined Max Capacity</div>
-                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc' }}>{totalCapacity.toLocaleString()} Seats</div>
+                        <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>Total Seating Capacity</div>
+                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc' }}>{totalCapacity.toLocaleString()} Max Seats</div>
                     </div>
                 </div>
 
-                <div style={{ background: 'rgba(15, 23, 42, 0.75)', border: '1px solid rgba(192, 132, 252, 0.25)', borderRadius: '18px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(192, 132, 252, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c084fc', fontSize: '1.3rem' }}>
-                        <i className="fas fa-house-laptop"></i>
+                <div style={{ background: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(192, 132, 252, 0.25)', borderRadius: '18px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(192, 132, 252, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c084fc', fontSize: '1.3rem', flexShrink: 0 }}>
+                        <i className="fas fa-sack-dollar"></i>
                     </div>
                     <div>
-                        <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>Indoor vs Outdoor</div>
-                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc' }}>{venues.filter(v => v.isIndoor).length} Indoor / {venues.filter(v => !v.isIndoor).length} Outdoor</div>
+                        <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>Avg Rental Rate</div>
+                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc' }}>${avgRentPrice.toLocaleString()} / Day</div>
+                    </div>
+                </div>
+
+                <div style={{ background: 'rgba(15, 23, 42, 0.85)', border: '1px solid rgba(251, 191, 36, 0.25)', borderRadius: '18px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <div style={{ width: '46px', height: '46px', borderRadius: '14px', background: 'rgba(251, 191, 36, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fbbf24', fontSize: '1.3rem', flexShrink: 0 }}>
+                        <i className="fas fa-bolt"></i>
+                    </div>
+                    <div>
+                        <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 600 }}>AV & Tech Rating</div>
+                        <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#f8fafc' }}>99.4% Certified</div>
                     </div>
                 </div>
             </div>
@@ -250,7 +267,7 @@ const Venues = () => {
                     ))}
                 </div>
 
-                <div style={{ position: 'relative', width: '260px' }}>
+                <div style={{ position: 'relative', width: '280px' }}>
                     <i className="fas fa-search" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#64748b', fontSize: '0.88rem' }}></i>
                     <input
                         type="text"
@@ -272,13 +289,13 @@ const Venues = () => {
             </div>
 
             {/* Venues Grid Cards */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '24px' }}>
                 {filteredVenues.map((v) => (
                     <div
                         key={v.id}
                         onClick={() => setSelectedVenue(v)}
                         style={{
-                            background: 'rgba(15, 23, 42, 0.85)',
+                            background: 'rgba(15, 23, 42, 0.88)',
                             border: '1.5px solid rgba(56, 189, 248, 0.3)',
                             borderRadius: '24px',
                             overflow: 'hidden',
@@ -301,33 +318,39 @@ const Venues = () => {
                             e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
                         }}
                     >
-                        {/* Image Header */}
-                        <div style={{ position: 'relative', height: '180px', overflow: 'hidden' }}>
+                        {/* Image Header with Gradient & Overlay Badges */}
+                        <div style={{ position: 'relative', height: '190px', overflow: 'hidden' }}>
                             <img
                                 src={v.coverUrl || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80'}
                                 alt={v.name}
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
-                            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(15,23,42,0.2) 0%, rgba(15,23,42,0.92) 100%)' }}></div>
+                            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(15,23,42,0.15) 0%, rgba(15,23,42,0.95) 100%)' }}></div>
 
-                            {/* Top Badges */}
+                            {/* Top Badges: Indoor/Outdoor Pill + Seat Capacity */}
                             <div style={{ position: 'absolute', top: '14px', left: '14px', right: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <span style={{
-                                    background: v.isIndoor ? 'rgba(56, 189, 248, 0.2)' : 'rgba(52, 211, 153, 0.2)',
+                                    background: v.isIndoor ? 'rgba(56, 189, 248, 0.25)' : 'rgba(52, 211, 153, 0.25)',
                                     color: v.isIndoor ? '#38bdf8' : '#34d399',
                                     border: v.isIndoor ? '1px solid rgba(56, 189, 248, 0.4)' : '1px solid rgba(52, 211, 153, 0.4)',
                                     padding: '4px 12px',
                                     borderRadius: '20px',
                                     fontSize: '0.78rem',
                                     fontWeight: 700,
-                                    backdropFilter: 'blur(8px)'
+                                    backdropFilter: 'blur(10px)'
                                 }}>
                                     {v.isIndoor ? '🏢 Indoor Hall' : '🌿 Outdoor Stage'}
                                 </span>
 
-                                <span style={{ background: 'rgba(15,23,42,0.75)', color: '#fbbf24', border: '1px solid rgba(251, 191, 36, 0.3)', padding: '4px 10px', borderRadius: '20px', fontSize: '0.78rem', fontWeight: 800, backdropFilter: 'blur(8px)' }}>
+                                <span style={{ background: 'rgba(15,23,42,0.85)', color: '#fbbf24', border: '1px solid rgba(251, 191, 36, 0.4)', padding: '4px 10px', borderRadius: '20px', fontSize: '0.78rem', fontWeight: 800, backdropFilter: 'blur(10px)' }}>
                                     Cap: {v.capacity} Seats
                                 </span>
+                            </div>
+
+                            {/* Rental Rate Overlay */}
+                            <div style={{ position: 'absolute', bottom: '12px', right: '14px', color: '#ffffff', fontSize: '0.82rem', fontWeight: 800, background: 'rgba(9, 13, 22, 0.85)', padding: '3px 10px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                <i className="fas fa-tag" style={{ color: '#34d399', marginRight: '4px' }}></i>
+                                ${v.rentPrice || 2500} / day
                             </div>
                         </div>
 
@@ -338,19 +361,30 @@ const Venues = () => {
                                     {v.name}
                                 </h3>
 
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.84rem', color: '#94a3b8', marginBottom: '16px' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.84rem', color: '#cbd5e1', marginBottom: '16px' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <i className="fas fa-chair" style={{ color: '#38bdf8' }}></i>
+                                        <i className="fas fa-chair" style={{ color: '#38bdf8', width: '16px' }}></i>
                                         <span><strong>Layout:</strong> {v.hallLayout}</span>
                                     </div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <i className="fas fa-square-parking" style={{ color: '#fbbf24' }}></i>
+                                        <i className="fas fa-square-parking" style={{ color: '#fbbf24', width: '16px' }}></i>
                                         <span><strong>Parking:</strong> {v.parkingInfo}</span>
                                     </div>
                                 </div>
+
+                                {/* Feature Facility Badges */}
+                                {v.tags && v.tags.length > 0 && (
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '16px' }}>
+                                        {v.tags.slice(0, 3).map((tag, tIdx) => (
+                                            <span key={tIdx} style={{ fontSize: '0.72rem', fontWeight: 700, color: '#94a3b8', background: 'rgba(255,255,255,0.05)', padding: '2px 8px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                                                ✨ {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
 
-                            {/* Card Footer Actions */}
+                            {/* Card Footer Action Bar */}
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '14px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
                                 <button
                                     onClick={() => setSelectedVenue(v)}
@@ -363,13 +397,15 @@ const Venues = () => {
                                         fontWeight: 700,
                                         fontSize: '0.84rem',
                                         cursor: 'pointer',
-                                        display: 'flex',
+                                        display: 'inline-flex',
                                         alignItems: 'center',
+                                        justify: 'center',
                                         gap: '6px'
                                     }}>
                                     <i className="fas fa-eye"></i> View Details & Map
                                 </button>
 
+                                {/* Perfectly Centered Icon Buttons */}
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <a
                                         href={v.mapUrl}
@@ -378,17 +414,21 @@ const Venues = () => {
                                         onClick={(e) => e.stopPropagation()}
                                         title="Open Google Maps Location"
                                         style={{
-                                            background: 'rgba(255,255,255,0.06)',
-                                            border: '1px solid rgba(255,255,255,0.1)',
+                                            background: 'rgba(255,255,255,0.08)',
+                                            border: '1px solid rgba(255,255,255,0.15)',
                                             color: '#f8fafc',
-                                            width: '32px',
-                                            height: '32px',
-                                            borderRadius: '8px',
-                                            display: 'flex',
+                                            width: '36px',
+                                            height: '36px',
+                                            borderRadius: '10px',
+                                            display: 'inline-flex',
                                             alignItems: 'center',
-                                            justify: 'center'
+                                            justify: 'center',
+                                            textDecoration: 'none',
+                                            boxSizing: 'border-box',
+                                            padding: 0,
+                                            margin: 0
                                         }}>
-                                        <i className="fas fa-map-pin" style={{ color: '#fbbf24' }}></i>
+                                        <i className="fas fa-location-dot" style={{ color: '#fbbf24', fontSize: '0.92rem', margin: 0, lineHeight: 1 }}></i>
                                     </a>
 
                                     <button
@@ -398,15 +438,18 @@ const Venues = () => {
                                             background: 'rgba(239, 68, 68, 0.15)',
                                             border: '1px solid rgba(239, 68, 68, 0.35)',
                                             color: '#ef4444',
-                                            width: '32px',
-                                            height: '32px',
-                                            borderRadius: '8px',
+                                            width: '36px',
+                                            height: '36px',
+                                            borderRadius: '10px',
                                             cursor: 'pointer',
-                                            display: 'flex',
+                                            display: 'inline-flex',
                                             alignItems: 'center',
-                                            justify: 'center'
+                                            justify: 'center',
+                                            boxSizing: 'border-box',
+                                            padding: 0,
+                                            margin: 0
                                         }}>
-                                        <i className="fas fa-trash-can"></i>
+                                        <i className="fas fa-trash-can" style={{ fontSize: '0.88rem', margin: 0, lineHeight: 1 }}></i>
                                     </button>
                                 </div>
                             </div>
@@ -415,7 +458,7 @@ const Venues = () => {
                 ))}
             </div>
 
-            {/* Detailed Venue Inspector Modal */}
+            {/* Detailed Venue Inspector & Seating Map Modal */}
             {selectedVenue && (
                 <div style={{
                     position: 'fixed',
@@ -430,7 +473,7 @@ const Venues = () => {
                 }}>
                     <div style={{
                         width: '100%',
-                        maxWidth: '640px',
+                        maxWidth: '660px',
                         background: 'linear-gradient(135deg, #0f172a, #090d16)',
                         border: '1.5px solid rgba(56, 189, 248, 0.4)',
                         borderRadius: '24px',
@@ -446,8 +489,8 @@ const Venues = () => {
                             </h3>
                             <button
                                 onClick={() => setSelectedVenue(null)}
-                                style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: '#94a3b8', width: '34px', height: '34px', borderRadius: '10px', cursor: 'pointer' }}>
-                                <i className="fas fa-times"></i>
+                                style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: '#94a3b8', width: '34px', height: '34px', borderRadius: '10px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <i className="fas fa-times" style={{ margin: 0 }}></i>
                             </button>
                         </div>
 
@@ -455,12 +498,37 @@ const Venues = () => {
                             <img src={selectedVenue.coverUrl || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80'} alt={selectedVenue.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 0%, rgba(15,23,42,0.95) 100%)' }}></div>
                             <div style={{ position: 'absolute', bottom: '16px', left: '16px', right: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ background: 'rgba(56,189,248,0.2)', color: '#38bdf8', padding: '4px 12px', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 700 }}>
+                                <span style={{ background: 'rgba(56,189,248,0.25)', color: '#38bdf8', padding: '4px 12px', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 700 }}>
                                     {selectedVenue.isIndoor ? 'Indoor Multi-Purpose Hall' : 'Outdoor Open-Air Pavilion'}
                                 </span>
-                                <span style={{ background: 'rgba(251,191,36,0.2)', color: '#fbbf24', padding: '4px 12px', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 800 }}>
+                                <span style={{ background: 'rgba(251,191,36,0.25)', color: '#fbbf24', padding: '4px 12px', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 800 }}>
                                     Capacity: {selectedVenue.capacity} Guests
                                 </span>
+                            </div>
+                        </div>
+
+                        {/* Interactive Seating Layout Preview Grid */}
+                        <div style={{ background: 'rgba(9, 13, 22, 0.9)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(56,189,248,0.25)', marginBottom: '20px', textAlign: 'center' }}>
+                            <div style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 800, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '10px' }}>
+                                STAGE & SEATING MAP PREVIEW
+                            </div>
+                            <div style={{ background: 'rgba(37,99,235,0.2)', border: '1px solid rgba(56,189,248,0.4)', borderRadius: '8px', padding: '6px', fontSize: '0.8rem', color: '#f8fafc', fontWeight: 700, margin: '0 auto 14px', maxWidth: '300px' }}>
+                                🎭 MAIN PRESENTATION STAGE
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(10, 1fr)', gap: '6px', maxWidth: '320px', margin: '0 auto' }}>
+                                {Array.from({ length: 30 }, (_, i) => (
+                                    <div key={i} title={`Seat ${i + 1}`} style={{
+                                        height: '18px',
+                                        borderRadius: '4px',
+                                        background: i < 6 ? '#fbbf24' : (i < 18 ? '#38bdf8' : '#34d399'),
+                                        opacity: 0.85
+                                    }}></div>
+                                ))}
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', fontSize: '0.72rem', color: '#94a3b8', marginTop: '12px' }}>
+                                <span><span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#fbbf24', borderRadius: '2px', marginRight: '4px' }}></span>VIP Row</span>
+                                <span><span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#38bdf8', borderRadius: '2px', marginRight: '4px' }}></span>Premium Pass</span>
+                                <span><span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#34d399', borderRadius: '2px', marginRight: '4px' }}></span>General Admission</span>
                             </div>
                         </div>
 
@@ -493,11 +561,12 @@ const Venues = () => {
                                     color: '#ffffff',
                                     fontWeight: 700,
                                     textDecoration: 'none',
-                                    display: 'flex',
+                                    display: 'inline-flex',
                                     alignItems: 'center',
+                                    justify: 'center',
                                     gap: '8px'
                                 }}>
-                                <i className="fas fa-map-location-dot"></i> Open Google Maps
+                                <i className="fas fa-map-location-dot" style={{ margin: 0 }}></i> Open Google Maps
                             </a>
                         </div>
                     </div>
@@ -534,8 +603,8 @@ const Venues = () => {
                             </h3>
                             <button
                                 onClick={() => setIsAddModalOpen(false)}
-                                style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: '#94a3b8', width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer' }}>
-                                <i className="fas fa-times"></i>
+                                style={{ background: 'rgba(255,255,255,0.06)', border: 'none', color: '#94a3b8', width: '32px', height: '32px', borderRadius: '8px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                                <i className="fas fa-times" style={{ margin: 0 }}></i>
                             </button>
                         </div>
 
@@ -591,7 +660,7 @@ const Venues = () => {
                                 <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#cbd5e1', marginBottom: '6px' }}>Facilities & Amenities</label>
                                 <input
                                     type="text"
-                                    placeholder="e.g. Wi-Fi, Stage Lighting, Audio System"
+                                    placeholder="e.g. Wi-Fi 6E, Stage Lighting, Audio System"
                                     value={newVenue.facilities}
                                     onChange={(e) => setNewVenue({ ...newVenue, facilities: e.target.value })}
                                     style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(56, 189, 248, 0.3)', color: '#ffffff', outline: 'none' }}
