@@ -57,6 +57,6 @@ app.get('*', (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Gatherly Backend Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Gatherly Backend Server running on http://0.0.0.0:${PORT}`);
 });
