@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: summerclass-project
+    name: gatherly-suite
     runtime: node
     plan: free
     buildCommand: npm install --include=dev && npm run build
