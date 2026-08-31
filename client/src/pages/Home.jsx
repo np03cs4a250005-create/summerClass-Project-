@@ -84,9 +84,11 @@ const Home = () => {
                     </span>
                 </div>
 
-                <div className="home-nav-links" style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
+                <div className="home-nav-links" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                     <a href="#features" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.92rem', fontWeight: 600, transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#38bdf8'} onMouseOut={(e) => e.target.style.color = '#94a3b8'}>Features</a>
-                    <a href="#explore-arcade-section" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.92rem', fontWeight: 600, transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#fbbf24'} onMouseOut={(e) => e.target.style.color = '#94a3b8'}>Arcade Lounge</a>
+                    <Link to="/gamification" style={{ color: '#fbbf24', textDecoration: 'none', fontSize: '0.92rem', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px', transition: 'color 0.2s' }}>
+                        <i className="fas fa-gamepad"></i> Arcade Lounge
+                    </Link>
                     <a href="#explore-demo-video-section" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.92rem', fontWeight: 600, transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#38bdf8'} onMouseOut={(e) => e.target.style.color = '#94a3b8'}>Demo Tour</a>
 
                     {/* Single Clean Sign In / Launch App Button */}
@@ -134,8 +136,11 @@ const Home = () => {
                     <Link to="/login" className="btn blue-glow-btn btn-lg" style={{ padding: '14px 32px', fontSize: '1.05rem', borderRadius: '14px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '10px', boxShadow: '0 0 25px rgba(37, 99, 235, 0.4)' }}>
                         <span>Explore Dashboard</span> <i className="fas fa-arrow-right"></i>
                     </Link>
-                    <button onClick={scrollToDemo} className="btn btn-secondary btn-lg" style={{ padding: '14px 28px', fontSize: '1.05rem', borderRadius: '14px', background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8', border: '1.5px solid rgba(56, 189, 248, 0.35)', display: 'inline-flex', alignItems: 'center', gap: '10px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 0 20px rgba(56, 189, 248, 0.15)' }}>
-                        <i className="fas fa-play-circle" style={{ color: '#38bdf8', fontSize: '1.2rem' }}></i> Watch Video Tour
+                    <Link to="/gamification" className="btn btn-secondary btn-lg" style={{ padding: '14px 28px', fontSize: '1.05rem', borderRadius: '14px', background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(217, 119, 6, 0.15))', color: '#fbbf24', border: '1.5px solid rgba(251, 191, 36, 0.45)', display: 'inline-flex', alignItems: 'center', gap: '10px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 0 20px rgba(251, 191, 36, 0.2)' }}>
+                        <i className="fas fa-gamepad" style={{ color: '#fbbf24', fontSize: '1.2rem' }}></i> Play Arcade Games
+                    </Link>
+                    <button onClick={scrollToDemo} className="btn btn-secondary btn-lg" style={{ padding: '14px 24px', fontSize: '1.05rem', borderRadius: '14px', background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8', border: '1.5px solid rgba(56, 189, 248, 0.35)', display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 700, cursor: 'pointer' }}>
+                        <i className="fas fa-play-circle" style={{ color: '#38bdf8' }}></i> Demo Tour
                     </button>
                 </div>
             </header>
