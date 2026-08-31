@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
+import AnimatedCerebriumBackground from '../components/AnimatedCerebriumBackground';
 
 const Signup = () => {
     const [email, setEmail] = useState('');
@@ -51,6 +52,8 @@ const Signup = () => {
             color: '#f8fafc',
             overflow: 'hidden'
         }}>
+            {/* Cerebrium Canvas Background */}
+            <AnimatedCerebriumBackground />
             {/* Ambient Floating Glow Orb */}
             <div className="float-anim" style={{
                 position: 'absolute',

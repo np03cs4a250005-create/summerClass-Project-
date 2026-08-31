@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useToast } from '../components/Toast';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import AnimatedCerebriumBackground from '../components/AnimatedCerebriumBackground';
 
 // ─── 1. Memory Match Card Game Component ───
 const MemoryGame = ({ onScoreEarned }) => {
@@ -433,6 +434,9 @@ const GamificationFiles = () => {
             backgroundAttachment: 'fixed',
             color: '#f8fafc'
         }}>
+            {/* Cerebrium Canvas Animated Background */}
+            <AnimatedCerebriumBackground />
+
             {/* Top Navigation Bar with Back to Home & Portal Switcher */}
             <div style={{
                 maxWidth: '1200px',

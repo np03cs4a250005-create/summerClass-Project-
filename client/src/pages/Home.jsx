@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import DemoVideoPlayer from '../components/DemoVideoPlayer';
+import AnimatedCerebriumBackground from '../components/AnimatedCerebriumBackground';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -31,6 +32,8 @@ const Home = () => {
             color: '#f8fafc',
             overflowX: 'hidden'
         }}>
+            {/* Cerebrium Dynamic Interactive Canvas Background */}
+            <AnimatedCerebriumBackground />
             {/* Luminous Ambient Glowing Background Aurora Orbs */}
             <div className="float-anim" style={{
                 position: 'absolute',
