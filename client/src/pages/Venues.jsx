@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import { venuesAPI } from '../services/api';
 import { useToast } from '../components/Toast';
 
@@ -59,6 +60,7 @@ const DEFAULT_VENUES = [
 ];
 
 const Venues = () => {
+    const navigate = useNavigate();
     const { showToast } = useToast();
     const [venues, setVenues] = useState(DEFAULT_VENUES);
     const [loading, setLoading] = useState(false);
@@ -396,26 +398,48 @@ const Venues = () => {
                                 )}
                             </div>
 
-                            {/* Card Footer Action Bar with 100% Dead-Centered Grid Icon Buttons */}
+                            {/* Card Footer Action Bar with Interconnected Events Link & Centered Grid Buttons */}
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '14px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                                <button
-                                    onClick={() => setSelectedVenue(v)}
-                                    style={{
-                                        background: 'rgba(56, 189, 248, 0.15)',
-                                        border: '1px solid rgba(56, 189, 248, 0.35)',
-                                        color: '#38bdf8',
-                                        padding: '8px 16px',
-                                        borderRadius: '10px',
-                                        fontWeight: 700,
-                                        fontSize: '0.84rem',
-                                        cursor: 'pointer',
-                                        display: 'inline-flex',
-                                        alignItems: 'center',
-                                        justify: 'center',
-                                        gap: '6px'
-                                    }}>
-                                    <i className="fas fa-eye"></i> View Details & Map
-                                </button>
+                                <div style={{ display: 'flex', gap: '8px' }}>
+                                    <button
+                                        onClick={() => setSelectedVenue(v)}
+                                        style={{
+                                            background: 'rgba(56, 189, 248, 0.15)',
+                                            border: '1px solid rgba(56, 189, 248, 0.35)',
+                                            color: '#38bdf8',
+                                            padding: '8px 14px',
+                                            borderRadius: '10px',
+                                            fontWeight: 700,
+                                            fontSize: '0.82rem',
+                                            cursor: 'pointer',
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            gap: '6px'
+                                        }}>
+                                        <i className="fas fa-eye"></i> Details
+                                    </button>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate('/events');
+                                        }}
+                                        title="Explore Scheduled Events"
+                                        style={{
+                                            background: 'rgba(37, 99, 235, 0.15)',
+                                            border: '1px solid rgba(37, 99, 235, 0.35)',
+                                            color: '#60a5fa',
+                                            padding: '8px 14px',
+                                            borderRadius: '10px',
+                                            fontWeight: 700,
+                                            fontSize: '0.82rem',
+                                            cursor: 'pointer',
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            gap: '6px'
+                                        }}>
+                                        <i className="fas fa-calendar-days"></i> Events
+                                    </button>
+                                </div>
 
                                 {/* 100% DEAD-CENTERED Grid Icon Buttons */}
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
