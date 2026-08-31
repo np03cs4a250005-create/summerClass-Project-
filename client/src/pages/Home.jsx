@@ -202,6 +202,47 @@ const Home = () => {
                 <p style={{ fontSize: '1.2rem', color: '#94a3b8', maxWidth: '720px', margin: '0 auto', lineHeight: 1.7, fontWeight: 400 }}>
                     From contactless QR check-ins and smart ticketing to interactive retro arcade games, schedule builders, and real-time dashboard analytics.
                 </p>
+
+                {/* Cerebrium-Style Interactive Live Highlights Ribbon */}
+                <div className="glow-breathe-cyan" style={{
+                    marginTop: '38px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '16px',
+                    flexWrap: 'wrap',
+                    padding: '10px 24px',
+                    borderRadius: '26px',
+                    background: 'rgba(9, 14, 28, 0.85)',
+                    border: '1.5px solid rgba(56, 189, 248, 0.35)',
+                    boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.15)',
+                    backdropFilter: 'blur(20px)'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 12px' }}>
+                        <span className="radar-ping" style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#34d399', display: 'inline-block' }}></span>
+                        <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f8fafc' }}>
+                            <strong style={{ color: '#34d399' }}>Live Engine:</strong> Contactless QR Fast Scan
+                        </span>
+                    </div>
+
+                    <div style={{ width: '1px', height: '20px', background: 'rgba(255, 255, 255, 0.18)' }}></div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 12px' }}>
+                        <i className="fas fa-microchip" style={{ color: '#38bdf8', fontSize: '0.95rem' }}></i>
+                        <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f8fafc' }}>
+                            <strong style={{ color: '#38bdf8' }}>AI Operator:</strong> Real-Time Voice Assist
+                        </span>
+                    </div>
+
+                    <div style={{ width: '1px', height: '20px', background: 'rgba(255, 255, 255, 0.18)' }}></div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 12px' }}>
+                        <i className="fas fa-trophy" style={{ color: '#fbbf24', fontSize: '0.95rem' }}></i>
+                        <span style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f8fafc' }}>
+                            <strong style={{ color: '#fbbf24' }}>XP Rewards:</strong> Retro Arcade Lounge
+                        </span>
+                    </div>
+                </div>
             </header>
 
             {/* Core Features Grid Section with Ease-in-out Medium Glows */}
