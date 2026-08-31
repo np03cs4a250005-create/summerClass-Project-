@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { attendeesAPI, emailAPI } from '../services/api';
 import { useToast } from '../components/Toast';
 
@@ -25,6 +26,7 @@ const Attendees = () => {
     const [emailMsg, setEmailMsg] = useState('');
     const [emailSending, setEmailSending] = useState(false);
     const { showToast } = useToast();
+    const navigate = useNavigate();
 
     const load = async () => {
         try { setLoading(true); const res = await attendeesAPI.getAll(); setAttendees(res.data); }
@@ -135,6 +137,9 @@ const Attendees = () => {
                                         </td>
                                         <td style={{ padding: '14px 16px' }}>
                                             <div style={{ display: 'flex', gap: '6px' }}>
+                                                <button className="btn-icon" title={`Issue Official Certificate for ${a.name}`} onClick={() => navigate(`/qr?attendeeName=${encodeURIComponent(a.name)}`)}>
+                                                    <i className="fas fa-award text-amber"></i>
+                                                </button>
                                                 {a.email && (
                                                     <button className="btn-icon" title={`Email ${a.name}`} onClick={() => { setEmailModal({ email: a.email, name: a.name }); setEmailSubject(''); setEmailMsg(''); }}>
                                                         <i className="fas fa-envelope text-info"></i>

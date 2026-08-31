@@ -179,7 +179,7 @@ const Dashboard = () => {
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
                         {[
                             { icon: 'fa-calendar-plus', color: '#818cf8', label: 'New Event', to: '/events', bg: 'rgba(99,102,241,0.12)' },
-                            { icon: 'fa-plus-circle', color: '#34d399', label: 'Add Venue', to: '/venues', bg: 'rgba(52,211,153,0.12)' },
+                            { icon: 'fa-certificate', color: '#fbbf24', label: 'Certificates', to: '/qr', bg: 'rgba(251,191,36,0.12)' },
                             { icon: 'fa-user-plus', color: '#c084fc', label: 'Add Attendee', to: '/attendees', bg: 'rgba(192,132,252,0.12)' },
                             { icon: 'fa-file-pdf', color: '#fbbf24', label: 'Export PDF', to: '/reports', bg: 'rgba(251,191,36,0.12)' },
                             { icon: 'fa-envelope', color: '#38bdf8', label: 'Send Email', to: '/communications', bg: 'rgba(56,189,248,0.12)' },

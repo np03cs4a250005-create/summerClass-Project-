@@ -104,7 +104,7 @@ const DEFAULT_EVENTS = [
     }
 ];
 
-const EventCard = ({ ev, onEdit, onDuplicate, onDelete, onReserve, idx }) => {
+const EventCard = ({ ev, onEdit, onDuplicate, onDelete, onReserve, onIssueCert, idx }) => {
     const [hovered, setHovered] = useState(false);
     const cat = CATEGORY_COLORS[ev.category] || CATEGORY_COLORS.Technology;
     const reservedCount = ev.reserved || Math.floor(ev.capacity * 0.78);
@@ -197,11 +197,14 @@ const EventCard = ({ ev, onEdit, onDuplicate, onDelete, onReserve, idx }) => {
                         <button
                             onClick={() => onReserve(ev)}
                             className="btn blue-glow-btn"
-                            style={{ padding: '8px 16px', borderRadius: '10px', fontSize: '0.85rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <i className="fas fa-ticket-alt"></i> Reserve Ticket
+                            style={{ padding: '8px 14px', borderRadius: '10px', fontSize: '0.82rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <i className="fas fa-ticket-alt"></i> Reserve
                         </button>
 
                         <div style={{ display: 'flex', gap: '6px' }}>
+                            <button className="btn-icon" onClick={() => onIssueCert(ev)} title="Issue Certificates for this Event">
+                                <i className="fas fa-certificate text-amber"></i>
+                            </button>
                             <button className="btn-icon" onClick={() => onDuplicate(ev.id)} title="Duplicate Event">
                                 <i className="far fa-copy text-indigo"></i>
                             </button>
@@ -492,7 +495,16 @@ const EventsHub = () => {
             ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '24px' }}>
                     {filtered.map((ev, i) => (
-                        <EventCard key={ev.id} ev={ev} idx={i} onEdit={openEdit} onDuplicate={handleDuplicate} onDelete={handleDelete} onReserve={handleReserveClick} />
+                        <EventCard
+                            key={ev.id}
+                            ev={ev}
+                            idx={i}
+                            onEdit={openEdit}
+                            onDuplicate={handleDuplicate}
+                            onDelete={handleDelete}
+                            onReserve={handleReserveClick}
+                            onIssueCert={(targetEv) => navigate(`/qr?eventId=${targetEv.id}&eventTitle=${encodeURIComponent(targetEv.name)}`)}
+                        />
                     ))}
                 </div>
             )}
