@@ -62,47 +62,116 @@ const Home = () => {
                 zIndex: 1
             }} />
 
-            {/* Clean Top Navigation Bar */}
+            {/* Premium Cerebrium-Grade Top Navigation Bar */}
             <nav className="home-nav" style={{
-                margin: '20px auto',
+                margin: '22px auto 10px',
                 width: '92%',
                 maxWidth: '1200px',
                 zIndex: 10,
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                padding: '14px 28px',
-                borderRadius: '20px',
-                background: 'rgba(9, 14, 28, 0.85)',
-                backdropFilter: 'blur(20px) saturate(1.3)',
-                border: '1px solid rgba(56, 189, 248, 0.25)',
-                boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.12)'
+                padding: '12px 24px',
+                borderRadius: '24px',
+                background: 'rgba(9, 14, 28, 0.88)',
+                backdropFilter: 'blur(24px) saturate(1.4)',
+                border: '1.5px solid rgba(56, 189, 248, 0.3)',
+                boxShadow: '0 20px 45px -12px rgba(0, 0, 0, 0.85), 0 0 25px rgba(56, 189, 248, 0.15)'
             }}>
-                <div className="home-brand" style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.35rem', fontWeight: 800 }}>
-                    <div style={{ background: 'linear-gradient(135deg, #2563eb, #0284c7)', padding: '9px 12px', borderRadius: '12px', boxShadow: '0 0 15px rgba(37, 99, 235, 0.4)', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
-                        <i className="fas fa-cubes brand-logo" style={{ color: '#fff' }}></i>
+                {/* Brand Logo & Name */}
+                <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '1.35rem', fontWeight: 800, textDecoration: 'none', color: '#fff' }}>
+                    <div style={{ background: 'linear-gradient(135deg, #2563eb, #0284c7)', padding: '8px 12px', borderRadius: '14px', boxShadow: '0 0 20px rgba(37, 99, 235, 0.5)', border: '1px solid rgba(255, 255, 255, 0.25)' }}>
+                        <i className="fas fa-cubes brand-logo" style={{ color: '#fff', fontSize: '1.2rem' }}></i>
                     </div>
-                    <span style={{ fontWeight: 800, letterSpacing: '-0.5px', color: '#fff' }}>
+                    <span style={{ fontWeight: 900, letterSpacing: '-0.5px', color: '#fff', fontSize: '1.35rem' }}>
                         Gatherly
                     </span>
-                </div>
+                </Link>
 
-                <div className="home-nav-links" style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-                    <a href="#features" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.92rem', fontWeight: 600, transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#38bdf8'} onMouseOut={(e) => e.target.style.color = '#94a3b8'}>Features</a>
-                    <Link to="/gamification" style={{ color: '#fbbf24', textDecoration: 'none', fontSize: '0.92rem', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px', transition: 'color 0.2s' }}>
-                        <i className="fas fa-gamepad"></i> Arcade Lounge
+                {/* Highlighted Navigation Action Pills */}
+                <div className="home-nav-links" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                    
+                    {/* Features Pill */}
+                    <a href="#features" style={{
+                        color: '#e0f2fe',
+                        textDecoration: 'none',
+                        fontSize: '0.88rem',
+                        fontWeight: 700,
+                        padding: '9px 18px',
+                        borderRadius: '14px',
+                        background: 'rgba(56, 189, 248, 0.1)',
+                        border: '1px solid rgba(56, 189, 248, 0.28)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                        boxShadow: '0 0 12px rgba(56, 189, 248, 0.1)'
+                    }} onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(56, 189, 248, 0.22)'; e.currentTarget.style.borderColor = '#38bdf8'; e.currentTarget.style.transform = 'translateY(-2px)'; }} onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(56, 189, 248, 0.1)'; e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.28)'; e.currentTarget.style.transform = 'none'; }}>
+                        <i className="fas fa-sparkles" style={{ color: '#38bdf8' }}></i> Features
+                    </a>
+
+                    {/* Arcade Lounge Glowing Pill */}
+                    <Link to="/gamification" className="glow-breathe-gold" style={{
+                        color: '#fef08a',
+                        textDecoration: 'none',
+                        fontSize: '0.88rem',
+                        fontWeight: 800,
+                        padding: '9px 20px',
+                        borderRadius: '14px',
+                        background: 'linear-gradient(135deg, rgba(217, 119, 6, 0.35) 0%, rgba(251, 191, 36, 0.2) 100%)',
+                        border: '1.5px solid rgba(251, 191, 36, 0.55)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                        boxShadow: '0 0 20px rgba(251, 191, 36, 0.25)'
+                    }} onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px) scale(1.03)'; e.currentTarget.style.borderColor = '#fbbf24'; }} onMouseOut={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.borderColor = 'rgba(251, 191, 36, 0.55)'; }}>
+                        <i className="fas fa-gamepad" style={{ color: '#fbbf24', fontSize: '1rem' }}></i> Arcade Lounge 🎮
                     </Link>
-                    <a href="#explore-demo-video-section" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.92rem', fontWeight: 600, transition: 'color 0.2s' }} onMouseOver={(e) => e.target.style.color = '#38bdf8'} onMouseOut={(e) => e.target.style.color = '#94a3b8'}>Demo Tour</a>
 
-                    {/* Single Clean Sign In / Launch App Button */}
-                    <Link to="/login" className="btn blue-glow-btn" style={{ borderRadius: '12px', padding: '10px 22px', fontSize: '0.9rem', fontWeight: 700, boxShadow: '0 0 20px rgba(37, 99, 235, 0.35)', marginLeft: '8px' }}>
-                        <i className="fas fa-right-to-bracket" style={{ marginRight: '6px' }}></i> Sign In
+                    {/* Demo Tour Pill */}
+                    <button onClick={scrollToDemo} style={{
+                        color: '#c7d2fe',
+                        textDecoration: 'none',
+                        fontSize: '0.88rem',
+                        fontWeight: 700,
+                        padding: '9px 18px',
+                        borderRadius: '14px',
+                        background: 'rgba(99, 102, 241, 0.15)',
+                        border: '1px solid rgba(99, 102, 241, 0.35)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        cursor: 'pointer',
+                        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                        boxShadow: '0 0 15px rgba(99, 102, 241, 0.12)'
+                    }} onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(99, 102, 241, 0.3)'; e.currentTarget.style.borderColor = '#818cf8'; e.currentTarget.style.transform = 'translateY(-2px)'; }} onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(99, 102, 241, 0.15)'; e.currentTarget.style.borderColor = 'rgba(99, 102, 241, 0.35)'; e.currentTarget.style.transform = 'none'; }}>
+                        <i className="fas fa-play-circle" style={{ color: '#818cf8' }}></i> Demo Tour
+                    </button>
+
+                    {/* Primary Highlighted Sign In / Launch Portal CTA */}
+                    <Link to="/login" className="btn blue-glow-btn" style={{
+                        borderRadius: '14px',
+                        padding: '10px 24px',
+                        fontSize: '0.92rem',
+                        fontWeight: 800,
+                        background: 'linear-gradient(135deg, #2563eb 0%, #0284c7 100%)',
+                        color: '#ffffff',
+                        boxShadow: '0 0 25px rgba(37, 99, 235, 0.55)',
+                        border: '1px solid rgba(255, 255, 255, 0.25)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        marginLeft: '6px',
+                        transition: 'all 0.25s ease'
+                    }} onMouseOver={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 0 35px rgba(37, 99, 235, 0.75)'; }} onMouseOut={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 0 25px rgba(37, 99, 235, 0.55)'; }}>
+                        <span>Sign In</span> <i className="fas fa-arrow-right"></i>
                     </Link>
                 </div>
             </nav>
 
-            {/* Glowing Hero Section with Tasteful Medium Ease-in-out Glow */}
-            <header className="hero-section" style={{ padding: '65px 20px 40px', textAlign: 'center', zIndex: 5, position: 'relative', maxWidth: '1100px', margin: '0 auto', width: '100%' }}>
+            {/* Glowing Hero Section with Clean Focus */}
+            <header className="hero-section" style={{ padding: '75px 20px 65px', textAlign: 'center', zIndex: 5, position: 'relative', maxWidth: '1100px', margin: '0 auto', width: '100%' }}>
                 <div className="glow-breathe-cyan" style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -110,42 +179,29 @@ const Home = () => {
                     background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(56, 189, 248, 0.12))',
                     border: '1.5px solid rgba(56, 189, 248, 0.4)',
                     borderRadius: '30px',
-                    padding: '8px 22px',
-                    marginBottom: '24px'
+                    padding: '8px 24px',
+                    marginBottom: '28px'
                 }}>
                     <span className="radar-ping" style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#38bdf8', display: 'inline-block' }}></span>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#7dd3fc', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#7dd3fc', letterSpacing: '0.6px', textTransform: 'uppercase' }}>
                         ⚡ Next-Gen Event Operations & Arcade Platform
                     </span>
                 </div>
 
                 <h1 className="blue-text-shimmer glow-text-ease" style={{
-                    fontSize: '3.6rem',
+                    fontSize: '3.8rem',
                     fontWeight: 900,
-                    margin: '0 auto 20px',
-                    lineHeight: 1.18,
-                    maxWidth: '920px',
-                    letterSpacing: '-1px'
+                    margin: '0 auto 24px',
+                    lineHeight: 1.15,
+                    maxWidth: '940px',
+                    letterSpacing: '-1.2px'
                 }}>
                     Bring People Together with Effortless Event Planning
                 </h1>
 
-                <p style={{ fontSize: '1.18rem', color: '#94a3b8', maxWidth: '700px', margin: '0 auto 36px', lineHeight: 1.65, fontWeight: 400 }}>
+                <p style={{ fontSize: '1.2rem', color: '#94a3b8', maxWidth: '720px', margin: '0 auto', lineHeight: 1.7, fontWeight: 400 }}>
                     From contactless QR check-ins and smart ticketing to interactive retro arcade games, schedule builders, and real-time dashboard analytics.
                 </p>
-
-                {/* Primary Action Buttons */}
-                <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '60px' }}>
-                    <Link to="/login" className="btn blue-glow-btn btn-lg" style={{ padding: '14px 32px', fontSize: '1.05rem', borderRadius: '14px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '10px', boxShadow: '0 0 25px rgba(37, 99, 235, 0.4)' }}>
-                        <span>Explore Dashboard</span> <i className="fas fa-arrow-right"></i>
-                    </Link>
-                    <Link to="/gamification" className="btn btn-secondary btn-lg" style={{ padding: '14px 28px', fontSize: '1.05rem', borderRadius: '14px', background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(217, 119, 6, 0.15))', color: '#fbbf24', border: '1.5px solid rgba(251, 191, 36, 0.45)', display: 'inline-flex', alignItems: 'center', gap: '10px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 0 20px rgba(251, 191, 36, 0.2)' }}>
-                        <i className="fas fa-gamepad" style={{ color: '#fbbf24', fontSize: '1.2rem' }}></i> Play Arcade Games
-                    </Link>
-                    <button onClick={scrollToDemo} className="btn btn-secondary btn-lg" style={{ padding: '14px 24px', fontSize: '1.05rem', borderRadius: '14px', background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8', border: '1.5px solid rgba(56, 189, 248, 0.35)', display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 700, cursor: 'pointer' }}>
-                        <i className="fas fa-play-circle" style={{ color: '#38bdf8' }}></i> Demo Tour
-                    </button>
-                </div>
             </header>
 
             {/* Core Features Grid Section with Ease-in-out Medium Glows */}
