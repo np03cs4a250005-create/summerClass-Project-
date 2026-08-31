@@ -44,6 +44,11 @@ const Layout = ({ children }) => {
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
     const location = useLocation();
 
+    // Auto-close mobile sidebar whenever route changes
+    React.useEffect(() => {
+        setIsMobileOpen(false);
+    }, [location.pathname]);
+
     const getTitle = () => {
         const titles = {
             '/dashboard': 'Dashboard Overview',
@@ -67,21 +72,37 @@ const Layout = ({ children }) => {
     };
 
     return (
-        <div className={`dashboard-layout ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`} style={{ display: 'flex', minHeight: '100vh', position: 'relative' }}>
+        <div className={`dashboard-layout ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`} style={{ display: 'flex', minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>
+            {/* Mobile Backdrop Overlay */}
+            {isMobileOpen && (
+                <div
+                    className="sidebar-mobile-backdrop"
+                    onClick={() => setIsMobileOpen(false)}
+                    style={{
+                        position: 'fixed',
+                        inset: 0,
+                        background: 'rgba(5, 11, 26, 0.75)',
+                        backdropFilter: 'blur(8px)',
+                        zIndex: 99998,
+                        transition: 'opacity 0.3s ease'
+                    }}
+                />
+            )}
+
             <Sidebar
                 isOpen={isMobileOpen}
                 isCollapsed={isSidebarCollapsed}
                 onClose={() => setIsMobileOpen(false)}
                 onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
             />
-            <div className="main-wrapper" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <div className="main-wrapper" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, width: '100%' }}>
                 <Header
                     pageTitle={getTitle()}
                     onToggleMobileMenu={() => setIsMobileOpen(!isMobileOpen)}
                     isSidebarCollapsed={isSidebarCollapsed}
                     onToggleSidebarCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
                 />
-                <main className="content-body" id="content-body" style={{ flex: 1, padding: '25px' }}>
+                <main className="content-body" id="content-body" style={{ flex: 1, padding: '24px', maxWidth: '100%', boxSizing: 'border-box' }}>
                     {children}
                 </main>
                 <footer className="dashboard-footer">

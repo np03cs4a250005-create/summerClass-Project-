@@ -279,7 +279,7 @@ const CalendarView = () => {
             </div>
 
             {/* Calendar Main Grid & Inspector Panel */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 360px', gap: '24px' }}>
+            <div className="calendar-layout-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 360px', gap: '24px' }}>
                 
                 {/* Left: Monthly Calendar Box */}
                 <div style={{

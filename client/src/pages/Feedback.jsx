@@ -181,7 +181,7 @@ const Feedback = () => {
             </div>
 
             {/* Layout Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: '290px 1fr', gap: '22px', alignItems: 'start', marginTop: '8px' }}>
+            <div className="feedback-layout-grid" style={{ display: 'grid', gridTemplateColumns: '290px 1fr', gap: '22px', alignItems: 'start', marginTop: '8px' }}>
 
                 {/* Rating Summary Card */}
                 <div className="blue-card-glass anim-slide-left" style={{ padding: '26px', borderRadius: '20px' }}>

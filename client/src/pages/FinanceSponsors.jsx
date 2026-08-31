@@ -323,7 +323,7 @@ const FinanceSponsors = () => {
             </div>
 
             {/* Financial Overview Grid: Balance Progress & Active Sponsors Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.2fr)', gap: '24px', marginBottom: '28px' }}>
+            <div className="finance-overview-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.2fr)', gap: '24px', marginBottom: '28px' }}>
                 
                 {/* Left Card: Revenue & Cost Distribution */}
                 <div style={{
