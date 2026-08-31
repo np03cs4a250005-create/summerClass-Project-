@@ -40,14 +40,60 @@ const Login = () => {
     };
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '20px', background: 'radial-gradient(ellipse at 50% 20%, #0d2a5d 0%, #081533 50%, #050b1a 100%)', color: '#f8fafc' }}>
-            <div style={{ display: 'flex', width: '100%', maxWidth: '1000px', minHeight: '560px', borderRadius: '24px', overflow: 'hidden', background: 'rgba(9, 14, 28, 0.85)', border: '1px solid rgba(56, 189, 248, 0.25)', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)', backdropFilter: 'blur(20px)', zIndex: 5 }}>
+        <div style={{
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative',
+            padding: '24px',
+            backgroundColor: '#030712',
+            backgroundImage: `
+                radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.22) 0%, rgba(37, 99, 235, 0.12) 40%, transparent 70%),
+                radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px)
+            `,
+            backgroundSize: '100% 100%, 100% 100%, 48px 48px, 48px 48px',
+            backgroundAttachment: 'fixed',
+            color: '#f8fafc',
+            overflow: 'hidden'
+        }}>
+            {/* Ambient Floating Glow Orb */}
+            <div className="float-anim" style={{
+                position: 'absolute',
+                top: '15%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '600px',
+                height: '350px',
+                borderRadius: '50%',
+                background: 'radial-gradient(ellipse, rgba(56, 189, 248, 0.15) 0%, rgba(37, 99, 235, 0.08) 50%, transparent 75%)',
+                filter: 'blur(75px)',
+                pointerEvents: 'none',
+                zIndex: 1
+            }} />
+
+            {/* Central Glass Card with Medium Ease-In-Out Glow */}
+            <div className="glow-breathe-cyan" style={{
+                display: 'flex',
+                width: '100%',
+                maxWidth: '1000px',
+                minHeight: '560px',
+                borderRadius: '26px',
+                overflow: 'hidden',
+                background: 'rgba(9, 14, 28, 0.88)',
+                border: '1.5px solid rgba(56, 189, 248, 0.35)',
+                boxShadow: '0 25px 55px -12px rgba(0, 0, 0, 0.85), 0 0 25px rgba(56, 189, 248, 0.15)',
+                backdropFilter: 'blur(24px) saturate(1.3)',
+                zIndex: 5
+            }}>
                 {/* Left Visual Panel */}
                 <div style={{ flex: 1.1, backgroundImage: "url('/assets/login_hero.png')", backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '40px' }} className="auth-left-panel">
-                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(11, 17, 32, 0.9) 0%, rgba(37, 99, 235, 0.45) 100%)' }}></div>
+                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(11, 17, 32, 0.92) 0%, rgba(37, 99, 235, 0.45) 100%)' }}></div>
                     
                     <div style={{ position: 'relative', zIndex: 2 }}>
-                        <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#e0f2fe', textDecoration: 'none', background: 'rgba(255, 255, 255, 0.1)', padding: '8px 18px', borderRadius: '20px', backdropFilter: 'blur(10px)', fontSize: '0.88rem', fontWeight: 600, border: '1px solid rgba(255, 255, 255, 0.15)', transition: 'all 0.2s' }}>
+                        <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#e0f2fe', textDecoration: 'none', background: 'rgba(255, 255, 255, 0.08)', padding: '8px 18px', borderRadius: '20px', backdropFilter: 'blur(10px)', fontSize: '0.88rem', fontWeight: 600, border: '1px solid rgba(255, 255, 255, 0.15)', transition: 'all 0.2s' }}>
                             <i className="fas fa-arrow-left" style={{ color: '#38bdf8' }}></i> Back to Home
                         </Link>
                     </div>
@@ -67,9 +113,9 @@ const Login = () => {
                 </div>
 
                 {/* Right Form Panel */}
-                <div style={{ flex: 1, padding: '40px 45px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'rgba(15, 23, 42, 0.5)' }}>
+                <div style={{ flex: 1, padding: '40px 45px', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: 'rgba(15, 23, 42, 0.55)' }}>
                     <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-                        <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'linear-gradient(135deg, #2563eb, #0284c7)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 0 25px rgba(37, 99, 235, 0.5)' }}>
+                        <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'linear-gradient(135deg, #2563eb, #0284c7)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 0 20px rgba(37, 99, 235, 0.5)', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
                             <i className="fas fa-cubes" style={{ fontSize: '1.6rem', color: '#fff' }}></i>
                         </div>
                         <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.3px' }}>Sign In to Your Workspace</h2>
@@ -90,7 +136,7 @@ const Login = () => {
                                     placeholder="admin@gatherly.com" 
                                     className="form-input" 
                                     autoComplete="username"
-                                    style={{ paddingLeft: '40px', borderRadius: '10px', height: '46px', background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.25)', color: '#f8fafc', fontSize: '0.95rem' }}
+                                    style={{ paddingLeft: '40px', borderRadius: '12px', height: '46px', background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.25)', color: '#f8fafc', fontSize: '0.95rem' }}
                                     required 
                                 />
                             </div>
@@ -107,13 +153,13 @@ const Login = () => {
                                     placeholder="••••••••" 
                                     className="form-input" 
                                     autoComplete="current-password"
-                                    style={{ paddingLeft: '40px', borderRadius: '10px', height: '46px', background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.25)', color: '#f8fafc', fontSize: '0.95rem' }}
+                                    style={{ paddingLeft: '40px', borderRadius: '12px', height: '46px', background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.25)', color: '#f8fafc', fontSize: '0.95rem' }}
                                     required 
                                 />
                             </div>
                         </div>
 
-                        <button type="submit" className="btn blue-glow-btn btn-block" style={{ marginTop: '24px', width: '100%', height: '48px', borderRadius: '12px', fontSize: '1rem', fontWeight: 600 }} disabled={loading}>
+                        <button type="submit" className="btn blue-glow-btn btn-block" style={{ marginTop: '24px', width: '100%', height: '48px', borderRadius: '12px', fontSize: '1rem', fontWeight: 700, boxShadow: '0 0 25px rgba(37, 99, 235, 0.45)' }} disabled={loading}>
                             {loading ? (
                                 <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                                     <i className="fas fa-spinner fa-spin"></i> Signing In...
@@ -125,15 +171,15 @@ const Login = () => {
                     </form>
 
                     {/* Quick Demo Credentials */}
-                    <div style={{ marginTop: '22px', padding: '14px', borderRadius: '12px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', textAlign: 'center' }}>
-                        <span style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginBottom: '10px', fontWeight: 500 }}>
+                    <div style={{ marginTop: '22px', padding: '14px', borderRadius: '14px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.08)', textAlign: 'center' }}>
+                        <span style={{ fontSize: '0.8rem', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginBottom: '10px', fontWeight: 600 }}>
                             <i className="fas fa-bolt" style={{ color: '#38bdf8' }}></i> Quick Demo Auto-Fill Roles:
                         </span>
                         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                            <button type="button" onClick={() => fillDemo('admin@gatherly.com', 'GatherlyAdmin2026!')} className="btn btn-sm" style={{ fontSize: '0.8rem', padding: '6px 14px', borderRadius: '8px', background: 'rgba(37, 99, 235, 0.25)', border: '1px solid rgba(56, 189, 248, 0.4)', color: '#7dd3fc', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                            <button type="button" onClick={() => fillDemo('admin@gatherly.com', 'GatherlyAdmin2026!')} className="btn btn-sm" style={{ fontSize: '0.8rem', padding: '6px 14px', borderRadius: '8px', background: 'rgba(37, 99, 235, 0.25)', border: '1px solid rgba(56, 189, 248, 0.4)', color: '#7dd3fc', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer', transition: 'all 0.2s' }}>
                                 <i className="fas fa-user-shield"></i> Admin / Organizer
                             </button>
-                            <button type="button" onClick={() => fillDemo('user@gatherly.com', 'GatherlyUser2026!')} className="btn btn-sm" style={{ fontSize: '0.8rem', padding: '6px 14px', borderRadius: '8px', background: 'rgba(52, 211, 153, 0.2)', border: '1px solid rgba(52, 211, 153, 0.4)', color: '#6ee7b7', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                            <button type="button" onClick={() => fillDemo('user@gatherly.com', 'GatherlyUser2026!')} className="btn btn-sm" style={{ fontSize: '0.8rem', padding: '6px 14px', borderRadius: '8px', background: 'rgba(52, 211, 153, 0.2)', border: '1px solid rgba(52, 211, 153, 0.4)', color: '#6ee7b7', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px', cursor: 'pointer', transition: 'all 0.2s' }}>
                                 <i className="fas fa-user"></i> Attendee / User
                             </button>
                         </div>
