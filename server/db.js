@@ -166,9 +166,9 @@ async function initDb() {
             timestamp TEXT NOT NULL
         )`);
 
-        // Ensure standard default accounts are always ready
-        const DEFAULT_ADMIN_HASH = '240eb518362d535e6a47a73477f8cf8c5eceab43e622c34a15054f67623cf530'; // sha-256 for admin123
-        const DEFAULT_USER_HASH = '6025d42fe0c3cb2a981cfa1f0cf1a581e7fb5a46c2d184eb444580228f4d4361';  // sha-256 for user123
+        // Ensure standard default accounts are always ready (Secure 2026 unbreached passwords)
+        const DEFAULT_ADMIN_HASH = 'fb6cb76d285d91780e51b462c06534168c847039930b138620407149f5850a91'; // sha-256 for GatherlyAdmin2026!
+        const DEFAULT_USER_HASH = 'ac76808972115514fe27f84c2552b7bc6f07059bc77657f45b5474bd2d9ab817';  // sha-256 for GatherlyUser2026!
 
         try {
             await db.asyncRun(`INSERT OR REPLACE INTO users (id, email, passwordHash, role, name) VALUES (?, ?, ?, ?, ?)`,

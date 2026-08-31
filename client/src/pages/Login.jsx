@@ -5,7 +5,7 @@ import { useToast } from '../components/Toast';
 
 const Login = () => {
     const [email, setEmail] = useState('admin@gatherly.com');
-    const [password, setPassword] = useState('admin123');
+    const [password, setPassword] = useState('GatherlyAdmin2026!');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { login } = useAuth();
@@ -130,10 +130,10 @@ const Login = () => {
                             <i className="fas fa-bolt" style={{ color: '#38bdf8' }}></i> Quick Demo Auto-Fill Roles:
                         </span>
                         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                            <button type="button" onClick={() => fillDemo('admin@gatherly.com', 'admin123')} className="btn btn-sm" style={{ fontSize: '0.8rem', padding: '6px 14px', borderRadius: '8px', background: 'rgba(37, 99, 235, 0.25)', border: '1px solid rgba(56, 189, 248, 0.4)', color: '#7dd3fc', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                            <button type="button" onClick={() => fillDemo('admin@gatherly.com', 'GatherlyAdmin2026!')} className="btn btn-sm" style={{ fontSize: '0.8rem', padding: '6px 14px', borderRadius: '8px', background: 'rgba(37, 99, 235, 0.25)', border: '1px solid rgba(56, 189, 248, 0.4)', color: '#7dd3fc', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                                 <i className="fas fa-user-shield"></i> Admin / Organizer
                             </button>
-                            <button type="button" onClick={() => fillDemo('user@gatherly.com', 'user123')} className="btn btn-sm" style={{ fontSize: '0.8rem', padding: '6px 14px', borderRadius: '8px', background: 'rgba(52, 211, 153, 0.2)', border: '1px solid rgba(52, 211, 153, 0.4)', color: '#6ee7b7', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                            <button type="button" onClick={() => fillDemo('user@gatherly.com', 'GatherlyUser2026!')} className="btn btn-sm" style={{ fontSize: '0.8rem', padding: '6px 14px', borderRadius: '8px', background: 'rgba(52, 211, 153, 0.2)', border: '1px solid rgba(52, 211, 153, 0.4)', color: '#6ee7b7', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                                 <i className="fas fa-user"></i> Attendee / User
                             </button>
                         </div>
