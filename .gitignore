@@ -8,10 +8,8 @@ node_modules/
 database.sqlite
 *.db
 
-# Build outputs
-dist/
+# Build outputs (allow client/dist to ensure Render serves static bundle)
 build/
-**/dist/
 **/build/
 
 # IDE & OS temporary files
