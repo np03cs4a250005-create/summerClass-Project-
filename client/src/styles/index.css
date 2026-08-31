@@ -380,10 +380,16 @@ body {
 .dashboard-layout {
     display: flex;
     min-height: 100vh;
-    background:
-        radial-gradient(ellipse at 20% 10%, rgba(37, 99, 235, 0.25) 0%, transparent 60%),
-        radial-gradient(ellipse at 80% 85%, rgba(14, 165, 233, 0.18) 0%, transparent 60%),
-        #0b1120;
+    position: relative;
+    background-color: #030712;
+    background-image:
+        radial-gradient(circle at 50% -10%, rgba(56, 189, 248, 0.25) 0%, rgba(37, 99, 235, 0.15) 30%, transparent 65%),
+        radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 8% 65%, rgba(20, 184, 166, 0.15) 0%, transparent 45%),
+        linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px;
+    background-attachment: fixed;
 }
 
 .main-wrapper {

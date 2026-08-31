@@ -89,27 +89,35 @@ const Dashboard = () => {
 
     return (
         <div>
-            {/* Executive Hero Banner */}
-            <div className="page-hero anim-fade-down" style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.18), rgba(168,85,247,0.18))', border: '1px solid rgba(99,102,241,0.3)', borderRadius: '24px', padding: '28px', marginBottom: '24px' }}>
+            {/* Executive Hero Banner (Cerebrium Aesthetic) */}
+            <div className="page-hero anim-fade-down" style={{
+                background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.22) 0%, rgba(124, 58, 237, 0.18) 50%, rgba(56, 189, 248, 0.12) 100%)',
+                border: '1.5px solid rgba(56, 189, 248, 0.35)',
+                borderRadius: '26px',
+                padding: '32px',
+                marginBottom: '28px',
+                boxShadow: '0 20px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+                backdropFilter: 'blur(20px)'
+            }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                        <div style={{ width: 60, height: 60, borderRadius: '18px', background: 'linear-gradient(135deg, #6366f1, #a855f7)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 22px rgba(99,102,241,0.45)', flexShrink: 0, animation: 'floatUpDown 3s ease-in-out infinite' }}>
-                            <i className="fas fa-chart-line" style={{ color: '#fff', fontSize: '1.5rem' }}></i>
+                        <div style={{ width: 64, height: 64, borderRadius: '20px', background: 'linear-gradient(135deg, #2563eb, #7c3aed)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 30px rgba(37, 99, 235, 0.6)', border: '1px solid rgba(255, 255, 255, 0.25)', flexShrink: 0, animation: 'floatUpDown 3s ease-in-out infinite' }}>
+                            <i className="fas fa-chart-line" style={{ color: '#fff', fontSize: '1.6rem' }}></i>
                         </div>
                         <div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-                                <h1 className="page-hero-title" style={{ fontSize: '1.75rem', margin: 0 }}>Dashboard Overview</h1>
-                                <span style={{ background: 'rgba(52,211,153,0.15)', color: '#34d399', border: '1px solid rgba(52,211,153,0.3)', padding: '2px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 800 }}>REAL-TIME ANALYTICS</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+                                <h1 className="page-hero-title" style={{ fontSize: '1.9rem', margin: 0, fontWeight: 900, letterSpacing: '-0.5px' }}>Dashboard Overview</h1>
+                                <span style={{ background: 'rgba(56, 189, 248, 0.18)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.4)', padding: '3px 12px', borderRadius: '16px', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '0.5px' }}>⚡ LIVE TELEMETRY</span>
                             </div>
-                            <p className="page-hero-sub" style={{ margin: 0 }}>Live performance metrics, attendee engagement streams, and quick platform actions</p>
+                            <p className="page-hero-sub" style={{ margin: 0, fontSize: '0.95rem', color: '#94a3b8' }}>Live performance metrics, attendee engagement streams, and quick platform actions</p>
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                        <button className="btn btn-primary" onClick={() => navigate('/events')} style={{ borderRadius: '12px', padding: '12px 20px', fontWeight: 700, boxShadow: '0 4px 18px rgba(99,102,241,0.4)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                        <button className="btn btn-primary" onClick={() => navigate('/events')} style={{ borderRadius: '14px', padding: '12px 24px', fontWeight: 700, boxShadow: '0 0 25px rgba(37, 99, 235, 0.5)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <i className="fas fa-plus-circle"></i> Create Event
                         </button>
-                        <button className="btn btn-secondary" onClick={() => navigate('/reports')} style={{ borderRadius: '12px', padding: '12px 20px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <button className="btn btn-secondary" onClick={() => navigate('/reports')} style={{ borderRadius: '14px', padding: '12px 22px', fontWeight: 700, background: 'rgba(255, 255, 255, 0.06)', border: '1.5px solid rgba(255, 255, 255, 0.15)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                             <i className="fas fa-file-export"></i> Export Report
                         </button>
                     </div>
@@ -118,7 +126,7 @@ const Dashboard = () => {
 
             {/* KPI Stat Cards Grid */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', marginBottom: '28px' }}>
-                <StatCard label="Total Events Published" value={stats.eventsCount} icon="fa-calendar-alt" color="#818cf8" trend="↑ +12% active summits" delay={0} />
+                <StatCard label="Total Events Published" value={stats.eventsCount} icon="fa-calendar-alt" color="#38bdf8" trend="↑ +12% active summits" delay={0} />
                 <StatCard label="Total Registered Guests" value={stats.attendeesCount} icon="fa-users" color="#34d399" trend="↑ 98% approval rate" delay={100} />
                 <StatCard label="Active Event Team Leads" value={4} icon="fa-user-shield" color="#c084fc" trend="100% operational" delay={200} />
                 <StatCard label="Total Platform Revenue" value={stats.totalRevenue} icon="fa-dollar-sign" color="#fbbf24" prefix="$" trend="↑ +24% ROI net profit" delay={300} />
