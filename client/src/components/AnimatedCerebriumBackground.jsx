@@ -8,6 +8,7 @@ const AnimatedCerebriumBackground = () => {
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
         let animationFrameId;
+
         let width = (canvas.width = window.innerWidth);
         let height = (canvas.height = window.innerHeight);
 
@@ -19,42 +20,73 @@ const AnimatedCerebriumBackground = () => {
 
         window.addEventListener('resize', handleResize);
 
-        // Mouse tracking for subtle interactive reactivity
-        const mouse = { x: width / 2, y: height / 2, radius: 160 };
+        // Smooth Mouse lerp for Cerebrium Cursor Spotlight
+        const mouse = { x: width / 2, y: height * 0.35, targetX: width / 2, targetY: height * 0.35, radius: 260 };
 
         const handleMouseMove = (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
+            mouse.targetX = e.clientX;
+            mouse.targetY = e.clientY;
         };
 
         window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
-        // Node Particle definition
-        const particleCount = Math.min(Math.floor(window.innerWidth / 28), 55);
-        const particles = [];
+        // Grid Configuration
+        const gridSize = 46;
 
-        const colors = ['#38bdf8', '#818cf8', '#34d399', '#c084fc', '#60a5fa'];
+        // Laser Scanning Light Beams (Cerebrium signature traveling light rays)
+        const beams = [];
+        const maxBeams = 10;
+
+        const createBeam = () => {
+            const isHorizontal = Math.random() > 0.5;
+            const speed = (Math.random() * 2.5 + 2.0) * (Math.random() > 0.5 ? 1 : -1);
+            if (isHorizontal) {
+                const row = Math.floor(Math.random() * Math.ceil(height / gridSize));
+                return {
+                    isHorizontal: true,
+                    x: speed > 0 ? -120 : width + 120,
+                    y: row * gridSize,
+                    len: Math.random() * 140 + 100,
+                    speed,
+                    color: Math.random() > 0.4 ? '#38bdf8' : '#818cf8',
+                    alpha: Math.random() * 0.6 + 0.4
+                };
+            } else {
+                const col = Math.floor(Math.random() * Math.ceil(width / gridSize));
+                return {
+                    isHorizontal: false,
+                    x: col * gridSize,
+                    y: speed > 0 ? -120 : height + 120,
+                    len: Math.random() * 140 + 100,
+                    speed,
+                    color: Math.random() > 0.4 ? '#38bdf8' : '#34d399',
+                    alpha: Math.random() * 0.6 + 0.4
+                };
+            }
+        };
+
+        for (let i = 0; i < maxBeams; i++) {
+            beams.push(createBeam());
+        }
+
+        // Floating Stardust Particles
+        const particleCount = Math.min(Math.floor(width / 32), 45);
+        const particles = [];
+        const colors = ['#38bdf8', '#818cf8', '#a855f7', '#34d399', '#67e8f9'];
 
         for (let i = 0; i < particleCount; i++) {
             particles.push({
                 x: Math.random() * width,
                 y: Math.random() * height,
-                vx: (Math.random() - 0.5) * 0.6,
-                vy: (Math.random() - 0.5) * 0.6,
-                radius: Math.random() * 2 + 1.2,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                radius: Math.random() * 1.8 + 1,
                 color: colors[Math.floor(Math.random() * colors.length)],
-                alpha: Math.random() * 0.5 + 0.3,
-                pulseSpeed: Math.random() * 0.02 + 0.01,
-                pulseOffset: Math.random() * Math.PI * 2
+                alpha: Math.random() * 0.6 + 0.2,
+                twinkleSpeed: Math.random() * 0.03 + 0.015,
+                twinkleOffset: Math.random() * Math.PI * 2
             });
         }
-
-        // Floating Nebula Glow Orbs
-        const orbs = [
-            { x: width * 0.25, y: height * 0.25, vx: 0.3, vy: 0.2, r: 320, color: 'rgba(56, 189, 248, 0.08)' },
-            { x: width * 0.8, y: height * 0.4, vx: -0.25, vy: 0.35, r: 380, color: 'rgba(124, 58, 237, 0.07)' },
-            { x: width * 0.5, y: height * 0.85, vx: 0.2, vy: -0.25, r: 350, color: 'rgba(52, 211, 153, 0.06)' }
-        ];
 
         let tick = 0;
 
@@ -62,51 +94,138 @@ const AnimatedCerebriumBackground = () => {
             tick++;
             ctx.clearRect(0, 0, width, height);
 
-            // 1. Draw Floating Aurora Orbs
-            for (let orb of orbs) {
-                orb.x += orb.vx;
-                orb.y += orb.vy;
+            // Interpolate mouse smoothly
+            mouse.x += (mouse.targetX - mouse.x) * 0.08;
+            mouse.y += (mouse.targetY - mouse.y) * 0.08;
 
-                if (orb.x < -orb.r) orb.x = width + orb.r;
-                if (orb.x > width + orb.r) orb.x = -orb.r;
-                if (orb.y < -orb.r) orb.y = height + orb.r;
-                if (orb.y > height + orb.r) orb.y = -orb.r;
+            // 1. Draw Top Horizon Volumetric Glowing Cone (Cerebrium signature spotlight)
+            const topHorizonGrad = ctx.createRadialGradient(
+                width / 2, -60, 20,
+                width / 2, 80, width * 0.75
+            );
+            const horizonPulse = 0.22 + Math.sin(tick * 0.015) * 0.05;
+            topHorizonGrad.addColorStop(0, `rgba(56, 189, 248, ${horizonPulse * 1.2})`);
+            topHorizonGrad.addColorStop(0.35, `rgba(124, 58, 237, ${horizonPulse * 0.7})`);
+            topHorizonGrad.addColorStop(0.7, `rgba(37, 99, 235, ${horizonPulse * 0.3})`);
+            topHorizonGrad.addColorStop(1, 'transparent');
+            ctx.fillStyle = topHorizonGrad;
+            ctx.fillRect(0, 0, width, height * 0.85);
 
-                const grad = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.r);
-                grad.addColorStop(0, orb.color);
-                grad.addColorStop(1, 'transparent');
-                ctx.fillStyle = grad;
+            // 2. Draw Interactive Mouse Spotlight Glow Flare
+            const mouseGrad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, mouse.radius);
+            mouseGrad.addColorStop(0, 'rgba(56, 189, 248, 0.15)');
+            mouseGrad.addColorStop(0.5, 'rgba(124, 58, 237, 0.06)');
+            mouseGrad.addColorStop(1, 'transparent');
+            ctx.fillStyle = mouseGrad;
+            ctx.beginPath();
+            ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 3. Draw Cyber Matrix Grid Lines
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.045)';
+
+            // Vertical Grid Lines
+            for (let x = 0; x < width; x += gridSize) {
                 ctx.beginPath();
-                ctx.arc(orb.x, orb.y, orb.r, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
             }
 
-            // 2. Update and Draw Particles
+            // Horizontal Grid Lines
+            for (let y = 0; y < height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+            }
+
+            // 4. Update and Render Scanning Light Beams (Laser Rays on Grid)
+            for (let i = 0; i < beams.length; i++) {
+                const b = beams[i];
+                if (b.isHorizontal) {
+                    b.x += b.speed;
+                    const isOffscreen = b.speed > 0 ? b.x - b.len > width : b.x + b.len < 0;
+                    if (isOffscreen) {
+                        beams[i] = createBeam();
+                        continue;
+                    }
+
+                    const grad = ctx.createLinearGradient(b.x - b.speed * (b.len / 2), b.y, b.x, b.y);
+                    grad.addColorStop(0, 'transparent');
+                    grad.addColorStop(0.8, b.color);
+                    grad.addColorStop(1, '#ffffff');
+
+                    ctx.strokeStyle = grad;
+                    ctx.lineWidth = 1.6;
+                    ctx.shadowColor = b.color;
+                    ctx.shadowBlur = 10;
+                    ctx.beginPath();
+                    ctx.moveTo(b.x - b.speed * (b.len / 2), b.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.stroke();
+                    ctx.shadowBlur = 0; // reset
+                } else {
+                    b.y += b.speed;
+                    const isOffscreen = b.speed > 0 ? b.y - b.len > height : b.y + b.len < 0;
+                    if (isOffscreen) {
+                        beams[i] = createBeam();
+                        continue;
+                    }
+
+                    const grad = ctx.createLinearGradient(b.x, b.y - b.speed * (b.len / 2), b.x, b.y);
+                    grad.addColorStop(0, 'transparent');
+                    grad.addColorStop(0.8, b.color);
+                    grad.addColorStop(1, '#ffffff');
+
+                    ctx.strokeStyle = grad;
+                    ctx.lineWidth = 1.6;
+                    ctx.shadowColor = b.color;
+                    ctx.shadowBlur = 10;
+                    ctx.beginPath();
+                    ctx.moveTo(b.x, b.y - b.speed * (b.len / 2));
+                    ctx.lineTo(b.x, b.y);
+                    ctx.stroke();
+                    ctx.shadowBlur = 0; // reset
+                }
+            }
+
+            // 5. Draw Glowing Grid Crosshair Intersections Near Mouse
+            for (let x = 0; x < width; x += gridSize) {
+                for (let y = 0; y < height; y += gridSize) {
+                    const distToMouse = Math.hypot(x - mouse.x, y - mouse.y);
+                    if (distToMouse < mouse.radius * 0.8) {
+                        const alpha = (1 - distToMouse / (mouse.radius * 0.8)) * 0.45;
+                        ctx.fillStyle = `rgba(56, 189, 248, ${alpha})`;
+                        ctx.fillRect(x - 1.5, y - 1.5, 3, 3);
+                    }
+                }
+            }
+
+            // 6. Draw Ambient Floating Cyber Stardust Particles & Connecting Filaments
             for (let i = 0; i < particles.length; i++) {
                 const p = particles[i];
 
-                // Mouse subtle repulsion
+                // Mouse interaction
                 const dx = mouse.x - p.x;
                 const dy = mouse.y - p.y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < mouse.radius) {
-                    const force = (mouse.radius - dist) / mouse.radius;
-                    p.x -= (dx / dist) * force * 1.5;
-                    p.y -= (dy / dist) * force * 1.5;
+                if (dist < 140) {
+                    const force = (140 - dist) / 140;
+                    p.x -= (dx / dist) * force * 1.2;
+                    p.y -= (dy / dist) * force * 1.2;
                 }
 
-                // Regular movement
                 p.x += p.vx;
                 p.y += p.vy;
 
-                // Screen bounce/wrap
                 if (p.x < 0) p.x = width;
                 if (p.x > width) p.x = 0;
                 if (p.y < 0) p.y = height;
                 if (p.y > height) p.y = 0;
 
-                // Pulse alpha
-                const currentAlpha = p.alpha + Math.sin(tick * p.pulseSpeed + p.pulseOffset) * 0.2;
+                const currentAlpha = p.alpha + Math.sin(tick * p.twinkleSpeed + p.twinkleOffset) * 0.25;
 
                 ctx.fillStyle = p.color;
                 ctx.globalAlpha = Math.max(0.1, Math.min(1, currentAlpha));
@@ -114,16 +233,14 @@ const AnimatedCerebriumBackground = () => {
                 ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
                 ctx.fill();
 
-                // 3. Connect close nodes with glowing neural filaments
+                // Faint Constellation Links
                 for (let j = i + 1; j < particles.length; j++) {
                     const p2 = particles[j];
-                    const distNodes = Math.hypot(p.x - p2.x, p.y - p2.y);
-
-                    if (distNodes < 110) {
-                        const lineAlpha = (1 - distNodes / 110) * 0.25;
+                    const dNodes = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dNodes < 95) {
                         ctx.strokeStyle = p.color;
-                        ctx.globalAlpha = lineAlpha;
-                        ctx.lineWidth = 1;
+                        ctx.globalAlpha = (1 - dNodes / 95) * 0.2;
+                        ctx.lineWidth = 0.8;
                         ctx.beginPath();
                         ctx.moveTo(p.x, p.y);
                         ctx.lineTo(p2.x, p2.y);
