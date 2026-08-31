@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { feedbackAPI } from '../services/api';
+import { feedbackAPI, eventsAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
 
 const AVATAR_COLORS = ['#38bdf8', '#34d399', '#fbbf24', '#c084fc', '#60a5fa', '#f472b6'];
 
 const DEFAULT_FEEDBACKS = [
-    { id: 'fb-1', attendeeName: 'Priya Shrestha', rating: 5, comment: 'The Global Tech Conference exceeded all my expectations! The AI keynote session was top-notch and the QR badge scanning made entry seamless.', reply: 'Thank you Priya! We are thrilled you enjoyed the AI keynote session.', createdAt: '2026-08-06' },
-    { id: 'fb-2', attendeeName: 'Rajesh Poudel', rating: 5, comment: 'Outstanding venue organization and networking lounge. Met incredible startup founders and investors!', reply: 'Appreciate your feedback Rajesh!', createdAt: '2026-08-05' },
-    { id: 'fb-3', attendeeName: 'Kamala Tamang', rating: 4, comment: 'Great UX design summit. Would love to see more hands-on workshop breakout rooms next year!', reply: '', createdAt: '2026-08-04' },
-    { id: 'fb-4', attendeeName: 'Dipesh Gurung', rating: 5, comment: 'Smooth ticket reservation and instant digital pass downloads. 10/10 event management platform!', reply: 'Thanks Dipesh! Glad the pass download was instant.', createdAt: '2026-08-03' },
+    { id: 'fb-1', eventName: 'Global Tech Conference', attendeeName: 'Priya Shrestha', rating: 5, comment: 'The Global Tech Conference exceeded all my expectations! The AI keynote session was top-notch and the QR badge scanning made entry seamless.', reply: 'Thank you Priya! We are thrilled you enjoyed the AI keynote session.', createdAt: '2026-08-06' },
+    { id: 'fb-2', eventName: 'Global Tech Conference', attendeeName: 'Rajesh Poudel', rating: 5, comment: 'Outstanding venue organization and networking lounge. Met incredible startup founders and investors!', reply: 'Appreciate your feedback Rajesh!', createdAt: '2026-08-05' },
+    { id: 'fb-3', eventName: 'Creative UX Summit', attendeeName: 'Kamala Tamang', rating: 4, comment: 'Great UX design summit. Would love to see more hands-on workshop breakout rooms next year!', reply: '', createdAt: '2026-08-04' },
+    { id: 'fb-4', eventName: 'Developer AI Hackathon', attendeeName: 'Dipesh Gurung', rating: 5, comment: 'Smooth ticket reservation and instant digital pass downloads. 10/10 event management platform!', reply: 'Thanks Dipesh! Glad the pass download was instant.', createdAt: '2026-08-03' },
 ];
 
 const StarRating = ({ rating, onChange = null }) => {
@@ -69,6 +69,8 @@ const SentimentBar = ({ ratings }) => {
 
 const Feedback = () => {
     const [feedbacks, setFeedbacks] = useState(DEFAULT_FEEDBACKS);
+    const [eventsList, setEventsList] = useState([]);
+    const [selectedEventName, setSelectedEventName] = useState('Global Tech Conference');
     const [loading, setLoading] = useState(true);
     const [replies, setReplies] = useState({});
     const [filterRating, setFilterRating] = useState('All');
@@ -85,9 +87,18 @@ const Feedback = () => {
     const loadFeedbacks = async () => {
         try {
             setLoading(true);
-            const res = await feedbackAPI.getAll();
-            if (res.data && Array.isArray(res.data) && res.data.length > 0) {
-                setFeedbacks(res.data);
+            const [fbRes, evRes] = await Promise.all([
+                feedbackAPI.getAll().catch(() => ({ data: [] })),
+                eventsAPI.getAll().catch(() => ({ data: [] }))
+            ]);
+
+            if (evRes.data && Array.isArray(evRes.data) && evRes.data.length > 0) {
+                setEventsList(evRes.data);
+                setSelectedEventName(evRes.data[0]?.name || evRes.data[0]?.title || 'Global Tech Conference');
+            }
+
+            if (fbRes.data && Array.isArray(fbRes.data) && fbRes.data.length > 0) {
+                setFeedbacks(fbRes.data);
             } else {
                 setFeedbacks(DEFAULT_FEEDBACKS);
             }
@@ -107,6 +118,7 @@ const Feedback = () => {
         const reviewerName = name.trim() || user?.name || 'Verified Attendee';
         const newReview = {
             id: 'fb-' + Date.now(),
+            eventName: selectedEventName,
             attendeeName: reviewerName,
             rating: rating,
             comment: comment,
@@ -125,7 +137,7 @@ const Feedback = () => {
         setComment('');
         setName('');
         setRating(5);
-        showToast('Thank you for submitting your review!', 'success');
+        showToast(`Thank you! Review for "${selectedEventName}" recorded.`, 'success');
     };
 
     const handleReply = async (id) => {
@@ -234,7 +246,14 @@ const Feedback = () => {
                                                     {initials}
                                                 </div>
                                                 <div>
-                                                    <strong style={{ fontSize: '0.95rem', color: '#f8fafc', display: 'block' }}>{fb.attendeeName}</strong>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                        <strong style={{ fontSize: '0.95rem', color: '#f8fafc' }}>{fb.attendeeName}</strong>
+                                                        {fb.eventName && (
+                                                            <span style={{ fontSize: '0.7rem', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.15)', padding: '2px 8px', borderRadius: '8px', border: '1px solid rgba(56, 189, 248, 0.3)', fontWeight: 700 }}>
+                                                                <i className="fas fa-calendar-check" style={{ marginRight: '4px' }}></i>{fb.eventName}
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                     <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{fb.createdAt || 'Verified Guest'}</span>
                                                 </div>
                                             </div>
@@ -291,6 +310,21 @@ const Feedback = () => {
                         </div>
 
                         <form onSubmit={handleAddReview}>
+                            {eventsList.length > 0 && (
+                                <div className="input-group" style={{ marginBottom: '16px' }}>
+                                    <label style={{ color: '#cbd5e1', fontSize: '0.85rem', marginBottom: '6px', display: 'block' }}>Associated Event</label>
+                                    <select
+                                        value={selectedEventName}
+                                        onChange={e => setSelectedEventName(e.target.value)}
+                                        className="form-input"
+                                        style={{ width: '100%', height: '42px', background: 'rgba(15,23,42,0.95)', color: '#fff', borderRadius: '10px' }}>
+                                        {eventsList.map(ev => (
+                                            <option key={ev.id} value={ev.name || ev.title}>{ev.name || ev.title}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            )}
+
                             <div className="input-group">
                                 <label style={{ color: '#cbd5e1', fontSize: '0.85rem' }}>Your Name (Optional)</label>
                                 <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Alex Rivera" className="form-input" style={{ width: '100%', height: '42px', background: 'rgba(15,23,42,0.8)', color: '#fff', borderRadius: '10px' }} />

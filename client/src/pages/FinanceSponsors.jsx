@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { financeAPI } from '../services/api';
+import { financeAPI, eventsAPI } from '../services/api';
 import { useToast } from '../components/Toast';
 
 const DEFAULT_SPONSORS = [
@@ -17,13 +17,6 @@ const DEFAULT_EXPENSES = [
     { id: 103, eventId: 'ev-1', title: 'Keynote Speaker Airfare & VIP Suite', category: 'Speakers', amount: 1800, status: 'Pending', date: '2026-08-02', vendor: 'Air Nepal Travels' },
     { id: 104, eventId: 'ev-1', title: 'Digital Billboard & Meta Ads Campaign', category: 'Marketing', amount: 1200, status: 'Paid', date: '2026-07-25', vendor: 'CyberMedia Marketing' },
     { id: 105, eventId: 'ev-2', title: 'Stage 4K LED Screen & Sound Rig', category: 'Equipment', amount: 2100, status: 'Paid', date: '2026-08-01', vendor: 'SoundWave A/V Systems' }
-];
-
-const SAMPLE_EVENTS = [
-    { id: 'all', title: 'All Combined Events' },
-    { id: 'ev-1', title: 'Global Tech Conference 2026' },
-    { id: 'ev-2', title: 'Creative Design & UX Summit' },
-    { id: 'ev-3', title: 'CleanTech & Green Energy Expo' }
 ];
 
 const RevenueBar = ({ label, amount, max, color, delay = 0 }) => {
@@ -43,6 +36,7 @@ const RevenueBar = ({ label, amount, max, color, delay = 0 }) => {
 
 const FinanceSponsors = () => {
     const { showToast } = useToast();
+    const [eventsList, setEventsList] = useState([{ id: 'all', title: 'All Combined Events' }]);
     const [selectedEventId, setSelectedEventId] = useState('all');
     const [expenses, setExpenses] = useState(DEFAULT_EXPENSES);
     const [sponsors, setSponsors] = useState(DEFAULT_SPONSORS);
@@ -69,20 +63,25 @@ const FinanceSponsors = () => {
     const [calcAudioVisual, setCalcAudioVisual] = useState(1800);
 
     useEffect(() => {
-        if (financeAPI && typeof financeAPI.getAll === 'function') {
-            financeAPI.getAll()
-                .then(r => {
-                    if (r && r.data) {
-                        if (Array.isArray(r.data.expenses) && r.data.expenses.length > 0) {
-                            setExpenses(prev => [...prev, ...r.data.expenses.filter(e => !prev.some(p => p.id === e.id))]);
-                        }
-                        if (Array.isArray(r.data.sponsors) && r.data.sponsors.length > 0) {
-                            setSponsors(prev => [...prev, ...r.data.sponsors.filter(s => !prev.some(p => p.id === s.id))]);
-                        }
-                    }
-                })
-                .catch(() => {});
-        }
+        // Fetch live events and finance data simultaneously
+        Promise.all([
+            eventsAPI.getAll().catch(() => ({ data: [] })),
+            financeAPI.getAll().catch(() => ({ data: null }))
+        ]).then(([evRes, finRes]) => {
+            if (evRes.data && Array.isArray(evRes.data) && evRes.data.length > 0) {
+                const options = [{ id: 'all', title: 'All Combined Events' }, ...evRes.data.map(e => ({ id: e.id, title: e.name || e.title }))];
+                setEventsList(options);
+            }
+
+            if (finRes && finRes.data) {
+                if (finRes.data.ticketRevenue && finRes.data.ticketRevenue > 0) {
+                    setTicketRevenue(24850 + finRes.data.ticketRevenue);
+                }
+                if (Array.isArray(finRes.data.expenses) && finRes.data.expenses.length > 0) {
+                    setExpenses(prev => [...prev, ...finRes.data.expenses.filter(e => !prev.some(p => p.id === e.id))]);
+                }
+            }
+        });
     }, []);
 
     const filteredExpenses = expenses.filter((e) => {
@@ -233,7 +232,7 @@ const FinanceSponsors = () => {
                                 cursor: 'pointer',
                                 outline: 'none'
                             }}>
-                            {SAMPLE_EVENTS.map((ev) => (
+                            {eventsList.map((ev) => (
                                 <option key={ev.id} value={ev.id}>{ev.title}</option>
                             ))}
                         </select>

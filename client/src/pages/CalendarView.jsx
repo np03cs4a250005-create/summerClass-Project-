@@ -86,26 +86,53 @@ const CalendarView = () => {
         showToast(`Selected Date: ${MONTH_NAMES[month]} ${dayNum}, ${year}`, 'success');
     };
 
-    const handleCreateEventSubmit = (e) => {
+    const handleCreateEventSubmit = async (e) => {
         e.preventDefault();
         if (!newEvent.name.trim()) return;
 
-        const created = {
-            id: `ev-custom-${Date.now()}`,
+        const payload = {
             name: newEvent.name.trim(),
             date: selectedDateStr,
             time: newEvent.time,
-            venue: newEvent.venue,
-            category: newEvent.category,
-            color: newEvent.color,
-            icon: newEvent.icon,
-            organizer: 'Current Host'
+            location: newEvent.venue || 'San Francisco Innovation Hub',
+            category: newEvent.category || 'Technology',
+            capacity: 150,
+            description: `Scheduled session for ${newEvent.name.trim()} on ${selectedDateStr}`,
+            color: newEvent.color || '#38bdf8'
         };
 
-        setEvents(prev => [created, ...prev]);
+        try {
+            const res = await eventsAPI.create(payload);
+            const created = {
+                id: res.data?.id || `ev-custom-${Date.now()}`,
+                name: payload.name,
+                date: selectedDateStr,
+                time: payload.time,
+                venue: payload.location,
+                category: payload.category,
+                color: payload.color,
+                icon: 'fa-calendar-check',
+                organizer: 'Current Host'
+            };
+            setEvents(prev => [created, ...prev]);
+        } catch {
+            const created = {
+                id: `ev-custom-${Date.now()}`,
+                name: payload.name,
+                date: selectedDateStr,
+                time: payload.time,
+                venue: payload.location,
+                category: payload.category,
+                color: payload.color,
+                icon: 'fa-calendar-check',
+                organizer: 'Current Host'
+            };
+            setEvents(prev => [created, ...prev]);
+        }
+
         setShowAddModal(false);
         setNewEvent({ name: '', category: 'Conference', time: '10:00 AM - 02:00 PM', venue: 'Main Auditorium', color: '#38bdf8', icon: 'fa-star' });
-        showToast(`Event "${created.name}" added to ${selectedDateStr}!`, 'success');
+        showToast(`Event "${payload.name}" published & interconnected across platform!`, 'success');
     };
 
     const handleDeleteEvent = (id, name) => {

@@ -23,17 +23,47 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const { eventId, attendeeId, ticketId, amount } = req.body;
-        const id = 'reg-' + Date.now();
+        const { eventId, attendeeId, attendeeName, email, phone, ticketId, ticketType, ticketName, amount, quantity } = req.body;
+        const id = req.body.id || 'reg-' + Date.now();
+        const totalAmt = Number(amount) || 0;
+        let finalAttId = attendeeId;
 
+        // If attendee details provided, ensure they exist in attendees table
+        if (attendeeName && email) {
+            const existing = await db.asyncGet('SELECT * FROM attendees WHERE email = ?', [email]);
+            if (existing) {
+                finalAttId = existing.id;
+            } else {
+                finalAttId = 'att-' + Date.now();
+                await db.asyncRun(
+                    `INSERT INTO attendees (id, name, email, phone, avatar, status, emergencyContact) VALUES (?, ?, ?, ?, ?, 'Approved', 'N/A')`,
+                    [finalAttId, attendeeName, email, phone || '', attendeeName.charAt(0).toUpperCase()]
+                );
+            }
+        }
+
+        // Insert confirmed registration with paid status so finance picks up revenue
         await db.asyncRun(
-            `INSERT INTO registrations (id, eventId, attendeeId, ticketId, status, paid, amount) VALUES (?, ?, ?, ?, 'Pending', 0, ?)`,
-            [id, eventId, attendeeId, ticketId || '', amount || 0]
+            `INSERT INTO registrations (id, eventId, attendeeId, ticketId, status, paid, amount) VALUES (?, ?, ?, ?, 'Confirmed', 1, ?)`,
+            [id, eventId || 'ev-1', finalAttId || 'att-guest', ticketId || '', totalAmt]
+        );
+
+        // If ticketId provided, decrement ticket capacity
+        if (ticketId) {
+            await db.asyncRun(`UPDATE tickets SET capacity = MAX(0, capacity - ?) WHERE id = ?`, [Number(quantity) || 1, ticketId]);
+        }
+
+        // Record Activity Log
+        const guestName = attendeeName || 'Guest';
+        await db.asyncRun(
+            `INSERT INTO activity_logs (id, action, detail, timestamp) VALUES (?, ?, ?, ?)`,
+            ['log-' + Date.now(), 'Ticket Reserved', `${guestName} reserved ${ticketType || 'Pass'} ($${totalAmt})`, new Date().toISOString()]
         );
 
         const created = await db.asyncGet('SELECT * FROM registrations WHERE id = ?', [id]);
         return res.status(201).json(created);
     } catch (err) {
+        console.error('Registration submit error:', err);
         return res.status(500).json({ error: 'Failed to submit registration' });
     }
 });

@@ -53,6 +53,29 @@ router.post('/', async (req, res) => {
             [id, name, category || 'Technology', tagStr, description || '', date, time || '09:00', location, capacity || 100, priority || 'Normal', color || '#818cf8']
         );
 
+        // Auto-generate initial ticket tiers for this event
+        const vipId = 'tkt-' + Date.now() + '-vip';
+        const premId = 'tkt-' + Date.now() + '-prem';
+        const stdId = 'tkt-' + Date.now() + '-std';
+
+        await db.asyncRun(
+            `INSERT INTO tickets (id, eventId, name, type, price, capacity, qrCode) VALUES
+             (?, ?, ?, 'VIP', 299, ?, ?),
+             (?, ?, ?, 'Premium', 149, ?, ?),
+             (?, ?, ?, 'Standard', 79, ?, ?)`,
+            [
+                vipId, id, `${name} - VIP Gold Pass`, Math.floor((capacity || 100) * 0.2), `GATH-VIP-${Math.floor(1000 + Math.random() * 9000)}`,
+                premId, id, `${name} - Premium All-Access`, Math.floor((capacity || 100) * 0.3), `GATH-PREM-${Math.floor(1000 + Math.random() * 9000)}`,
+                stdId, id, `${name} - Standard Pass`, Math.floor((capacity || 100) * 0.5), `GATH-STD-${Math.floor(1000 + Math.random() * 9000)}`
+            ]
+        );
+
+        // Record Activity Log
+        await db.asyncRun(
+            `INSERT INTO activity_logs (id, action, detail, timestamp) VALUES (?, ?, ?, ?)`,
+            ['log-' + Date.now(), 'Event Created', `Event "${name}" published for ${date} with 3 ticket tiers`, new Date().toISOString()]
+        );
+
         const created = await db.asyncGet('SELECT * FROM events WHERE id = ?', [id]);
         return res.status(201).json(created);
     } catch (err) {
