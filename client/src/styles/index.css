@@ -346,6 +346,80 @@ body {
     box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.25) !important;
 }
 
+/* ─── Smooth Ease-In-Out Medium Glow Breathing Animations ─── */
+@keyframes glowEaseInOut {
+    0%, 100% {
+        box-shadow: 0 0 16px rgba(56, 189, 248, 0.18), inset 0 0 10px rgba(56, 189, 248, 0.05);
+        border-color: rgba(56, 189, 248, 0.32);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(56, 189, 248, 0.35), inset 0 0 16px rgba(56, 189, 248, 0.12);
+        border-color: rgba(56, 189, 248, 0.55);
+    }
+}
+
+@keyframes textGlowEase {
+    0%, 100% {
+        text-shadow: 0 0 12px rgba(56, 189, 248, 0.35), 0 0 24px rgba(37, 99, 235, 0.2);
+    }
+    50% {
+        text-shadow: 0 0 22px rgba(56, 189, 248, 0.6), 0 0 40px rgba(37, 99, 235, 0.35);
+    }
+}
+
+@keyframes goldGlowEase {
+    0%, 100% {
+        box-shadow: 0 0 16px rgba(251, 191, 36, 0.2), inset 0 0 10px rgba(251, 191, 36, 0.06);
+        border-color: rgba(251, 191, 36, 0.35);
+    }
+    50% {
+        box-shadow: 0 0 32px rgba(251, 191, 36, 0.4), inset 0 0 18px rgba(251, 191, 36, 0.14);
+        border-color: rgba(251, 191, 36, 0.65);
+    }
+}
+
+@keyframes emeraldGlowEase {
+    0%, 100% {
+        box-shadow: 0 0 16px rgba(52, 211, 153, 0.18), inset 0 0 10px rgba(52, 211, 153, 0.05);
+        border-color: rgba(52, 211, 153, 0.32);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(52, 211, 153, 0.35), inset 0 0 16px rgba(52, 211, 153, 0.12);
+        border-color: rgba(52, 211, 153, 0.55);
+    }
+}
+
+@keyframes purpleGlowEase {
+    0%, 100% {
+        box-shadow: 0 0 16px rgba(192, 132, 252, 0.18), inset 0 0 10px rgba(192, 132, 252, 0.05);
+        border-color: rgba(192, 132, 252, 0.32);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(192, 132, 252, 0.35), inset 0 0 16px rgba(192, 132, 252, 0.12);
+        border-color: rgba(192, 132, 252, 0.55);
+    }
+}
+
+.glow-breathe-cyan {
+    animation: glowEaseInOut 4s ease-in-out infinite;
+}
+
+.glow-breathe-emerald {
+    animation: emeraldGlowEase 4.2s ease-in-out infinite;
+}
+
+.glow-breathe-purple {
+    animation: purpleGlowEase 4.4s ease-in-out infinite;
+}
+
+.glow-breathe-gold {
+    animation: goldGlowEase 3.8s ease-in-out infinite;
+}
+
+.glow-text-ease {
+    animation: textGlowEase 4s ease-in-out infinite;
+}
+
 .auth-card h2 {
     font-size: 2rem;
     font-weight: 800;
