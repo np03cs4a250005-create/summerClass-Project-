@@ -5,6 +5,7 @@ import { ToastProvider } from './components/Toast';
 
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
+import VoiceAIAssistant from './components/VoiceAIAssistant';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -87,6 +88,7 @@ const Layout = ({ children }) => {
                     <p>&copy; 2026 Gatherly Suite — Enterprise Event Platform</p>
                 </footer>
             </div>
+            <VoiceAIAssistant />
         </div>
     );
 };

@@ -8,7 +8,9 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [transcript, setTranscript] = useState('');
     const [aiReply, setAiReply] = useState(null);
-    const [voiceMuted, setVoiceMuted] = useState(false);
+    const [voiceMuted, setVoiceMuted] = useState(() => {
+        return localStorage.getItem('gatherly_ai_voice_muted') === 'true';
+    });
     const [availableVoices, setAvailableVoices] = useState([]);
     const [selectedVoice, setSelectedVoice] = useState(null);
     const [messages, setMessages] = useState([
@@ -19,10 +21,15 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
         }
     ]);
 
+    const voiceMutedRef = useRef(voiceMuted);
     const recognitionRef = useRef(null);
-    const synthRef = useRef(window.speechSynthesis);
     const messagesEndRef = useRef(null);
     const navigate = useNavigate();
+
+    // Keep voiceMutedRef synchronized
+    useEffect(() => {
+        voiceMutedRef.current = voiceMuted;
+    }, [voiceMuted]);
 
     // Synchronize with external modal trigger if passed
     useEffect(() => {
@@ -30,6 +37,25 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
             setIsOpen(externalIsOpen);
         }
     }, [externalIsOpen]);
+
+    const stopSpeaking = () => {
+        if ('speechSynthesis' in window) {
+            try {
+                window.speechSynthesis.cancel();
+            } catch (e) {}
+        }
+        setIsSpeaking(false);
+    };
+
+    const toggleVoiceMute = () => {
+        const nextState = !voiceMuted;
+        setVoiceMuted(nextState);
+        voiceMutedRef.current = nextState;
+        localStorage.setItem('gatherly_ai_voice_muted', String(nextState));
+        if (nextState) {
+            stopSpeaking();
+        }
+    };
 
     const handleClose = () => {
         setIsOpen(false);
@@ -43,7 +69,6 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
             if ('speechSynthesis' in window) {
                 const voices = window.speechSynthesis.getVoices();
                 setAvailableVoices(voices);
-                // Prefer natural English voices
                 const pref = voices.find(v => (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Samantha') || v.name.includes('Zira') || v.name.includes('David')) && v.lang.startsWith('en')) || voices.find(v => v.lang.startsWith('en')) || voices[0];
                 if (pref) setSelectedVoice(pref);
             }
@@ -52,6 +77,9 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
         if ('speechSynthesis' in window) {
             window.speechSynthesis.onvoiceschanged = loadVoices;
         }
+        return () => {
+            stopSpeaking();
+        };
     }, []);
 
     // Initialize Web Speech Recognition
@@ -102,8 +130,12 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
 
     // Speak AI Response using SpeechSynthesis
     const speakText = (text) => {
-        if (voiceMuted || !('speechSynthesis' in window)) return;
+        if (voiceMutedRef.current || voiceMuted || !('speechSynthesis' in window)) {
+            stopSpeaking();
+            return;
+        }
         stopSpeaking();
+        if (!text || !text.trim()) return;
 
         // Clean markdown formatting for spoken output
         const cleanSpeechText = text
@@ -117,16 +149,19 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
         utterance.rate = 1.0;
         utterance.pitch = 1.0;
 
-        utterance.onstart = () => setIsSpeaking(true);
+        utterance.onstart = () => {
+            if (voiceMutedRef.current) {
+                stopSpeaking();
+            } else {
+                setIsSpeaking(true);
+            }
+        };
         utterance.onend = () => setIsSpeaking(false);
         utterance.onerror = () => setIsSpeaking(false);
 
-        synthRef.current.speak(utterance);
-    };
-
-    const stopSpeaking = () => {
-        if ('speechSynthesis' in window) {
-            synthRef.current.cancel();
+        try {
+            window.speechSynthesis.speak(utterance);
+        } catch (e) {
             setIsSpeaking(false);
         }
     };
@@ -142,7 +177,9 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
                     recognitionRef.current.start();
                 } catch (e) {
                     recognitionRef.current.stop();
-                    setTimeout(() => recognitionRef.current.start(), 200);
+                    setTimeout(() => {
+                        try { recognitionRef.current.start(); } catch (err) {}
+                    }, 200);
                 }
             } else {
                 alert('Web Speech Recognition API is not supported in this browser version. Please use Google Chrome or Edge.');
@@ -200,104 +237,94 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
             {/* Floating Cyber Voice Orb Button & Badge (Bottom-Right) */}
             <div className="voice-assistant-orb-btn" style={{
                 position: 'fixed',
-                bottom: '28px',
-                right: '28px',
-                zIndex: 99999,
+                bottom: '24px',
+                right: '24px',
+                zIndex: 9999,
                 display: 'flex',
                 alignItems: 'center',
-                gap: '14px',
+                gap: '12px',
                 cursor: 'pointer'
             }}>
-                {/* Always-Visible Glowing Voice Assistant Badge */}
+                {/* Glowing Voice Assistant Badge */}
                 <div
                     onClick={() => setIsOpen(!isOpen)}
                     className="voice-badge-banner"
                     style={{
-                        background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 58, 138, 0.9))',
-                        border: '1.5px solid rgba(56, 189, 248, 0.5)',
-                        borderRadius: '24px',
-                        padding: '10px 18px',
+                        background: 'rgba(15, 23, 42, 0.9)',
+                        border: '1px solid rgba(56, 189, 248, 0.4)',
+                        borderRadius: '20px',
+                        padding: '8px 16px',
                         color: '#f8fafc',
-                        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(37, 99, 235, 0.3)',
+                        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)',
                         backdropFilter: 'blur(12px)',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '10px',
+                        gap: '8px',
                         transition: 'all 0.3s ease'
                     }}>
                     <span style={{
-                        width: '10px',
-                        height: '10px',
+                        width: '8px',
+                        height: '8px',
                         borderRadius: '50%',
-                        background: isListening ? '#ef4444' : '#38bdf8',
-                        boxShadow: isListening ? '0 0 12px #ef4444' : '0 0 12px #38bdf8',
+                        background: isListening ? '#ef4444' : (voiceMuted ? '#64748b' : '#38bdf8'),
+                        boxShadow: isListening ? '0 0 10px #ef4444' : (voiceMuted ? 'none' : '0 0 10px #38bdf8'),
                         display: 'inline-block'
                     }}></span>
                     <div>
-                        <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#ffffff', letterSpacing: '0.3px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <i className="fas fa-sparkles" style={{ color: '#38bdf8', fontSize: '0.8rem' }}></i>
-                            AI Voice Assistant
+                        <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <i className="fas fa-robot" style={{ color: '#38bdf8', fontSize: '0.8rem' }}></i>
+                            Gatherly AI
                         </div>
-                        <div style={{ fontSize: '0.73rem', color: '#94a3b8', fontWeight: 500 }}>
-                            {isListening ? 'Listening...' : (isSpeaking ? 'AI Speaking...' : 'Talk or Ask Anything!')}
+                        <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>
+                            {voiceMuted ? 'Voice Muted' : (isListening ? 'Listening...' : (isSpeaking ? 'Speaking...' : 'Ask Anything!'))}
                         </div>
                     </div>
                 </div>
 
-                {/* Glowing Pulsing Cyber Microphone Orb Button */}
+                {/* Cyber Microphone Orb Button */}
                 <button
                     onClick={() => setIsOpen(!isOpen)}
                     title="Talk to Gatherly Voice AI Assistant"
                     style={{
-                        width: '66px',
-                        height: '66px',
+                        width: '54px',
+                        height: '54px',
                         borderRadius: '50%',
                         background: isListening
                             ? 'radial-gradient(circle, #ef4444 0%, #991b1b 100%)'
-                            : 'linear-gradient(135deg, #0284c7, #2563eb)',
-                        border: '3px solid rgba(255, 255, 255, 0.8)',
+                            : (voiceMuted ? 'linear-gradient(135deg, #475569, #334155)' : 'linear-gradient(135deg, #0284c7, #2563eb)'),
+                        border: '2px solid rgba(255, 255, 255, 0.7)',
                         color: '#ffffff',
-                        fontSize: '1.6rem',
+                        fontSize: '1.3rem',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
-                        justify: 'center',
+                        justifyContent: 'center',
                         boxShadow: isListening
-                            ? '0 0 35px rgba(239, 68, 68, 0.9), 0 0 70px rgba(239, 68, 68, 0.5)'
-                            : '0 0 30px rgba(37, 99, 235, 0.8), 0 0 60px rgba(56, 189, 248, 0.5)',
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                            ? '0 0 25px rgba(239, 68, 68, 0.8)'
+                            : '0 0 20px rgba(37, 99, 235, 0.6)',
+                        transition: 'all 0.25s ease',
                         position: 'relative',
                         padding: 0,
                         margin: 0
                     }}>
-                    <i className={`fas ${isListening ? 'fa-microphone fa-bounce' : 'fa-headset'}`} style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justify: 'center',
-                        width: '100%',
-                        height: '100%',
-                        transform: isListening ? 'none' : 'translateX(3px)',
-                        margin: 0,
-                        padding: 0,
-                        lineHeight: 1
-                    }}></i>
+                    <i className={`fas ${isListening ? 'fa-microphone fa-bounce' : (voiceMuted ? 'fa-volume-xmark' : 'fa-headset')}`}></i>
                 </button>
             </div>
 
-            {/* AI Voice Assistant Full Interaction Modal Container */}
+            {/* AI Voice Assistant Modal */}
             {isOpen && (
                 <div style={{
                     position: 'fixed',
-                    bottom: '110px',
-                    right: '28px',
-                    width: 'calc(100vw - 56px)',
-                    maxWidth: '440px',
-                    height: '560px',
-                    maxHeight: 'calc(100vh - 140px)',
+                    bottom: '90px',
+                    right: '24px',
+                    width: 'calc(100vw - 48px)',
+                    maxWidth: '420px',
+                    height: '520px',
+                    maxHeight: 'calc(100vh - 120px)',
                     background: 'radial-gradient(ellipse at 50% 0%, #0d2147 0%, #081126 60%, #040814 100%)',
-                    border: '1.5px solid rgba(56, 189, 248, 0.4)',
-                    borderRadius: '24px',
-                    boxShadow: '0 25px 60px -10px rgba(0, 0, 0, 0.9), 0 0 50px rgba(37, 99, 235, 0.4)',
+                    border: '1px solid rgba(56, 189, 248, 0.4)',
+                    borderRadius: '20px',
+                    boxShadow: '0 20px 50px rgba(0, 0, 0, 0.85)',
                     zIndex: 99999,
                     display: 'flex',
                     flexDirection: 'column',
@@ -307,51 +334,61 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
                 }}>
                     {/* Assistant Header */}
                     <div style={{
-                        padding: '16px 20px',
+                        padding: '14px 18px',
                         background: 'rgba(15, 23, 42, 0.95)',
                         borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
                         display: 'flex',
-                        justify: 'space-between',
+                        justifyContent: 'space-between',
                         alignItems: 'center',
-                        gap: '16px'
+                        gap: '12px'
                     }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: 0 }}>
                             <div style={{
-                                width: '38px',
-                                height: '38px',
-                                borderRadius: '12px',
+                                width: '36px',
+                                height: '36px',
+                                borderRadius: '10px',
                                 background: 'linear-gradient(135deg, #2563eb, #0284c7)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 color: '#fff',
-                                boxShadow: '0 0 15px rgba(37, 99, 235, 0.6)',
                                 flexShrink: 0
                             }}>
-                                <i className="fas fa-robot" style={{ fontSize: '1.1rem' }}></i>
+                                <i className="fas fa-robot" style={{ fontSize: '1rem' }}></i>
                             </div>
                             <div style={{ minWidth: 0 }}>
-                                <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#f8fafc', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: '#f8fafc', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                     Gatherly Voice AI
                                 </h4>
-                                <span style={{ fontSize: '0.75rem', color: isListening ? '#ef4444' : (isSpeaking ? '#38bdf8' : '#4ade80'), fontWeight: 600, display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                    ● {isListening ? 'Listening...' : (isSpeaking ? 'Speaking Response...' : 'Voice Ready')}
+                                <span style={{ fontSize: '0.72rem', color: voiceMuted ? '#f87171' : (isListening ? '#ef4444' : (isSpeaking ? '#38bdf8' : '#4ade80')), fontWeight: 600, display: 'block' }}>
+                                    ● {voiceMuted ? 'Voice Muted (Text Only)' : (isListening ? 'Listening...' : (isSpeaking ? 'Speaking...' : 'Voice Ready'))}
                                 </span>
                             </div>
                         </div>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                            <button onClick={() => setVoiceMuted(!voiceMuted)} title={voiceMuted ? "Unmute AI Voice" : "Mute AI Voice"} style={{
-                                background: 'rgba(255,255,255,0.06)',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                color: voiceMuted ? '#ef4444' : '#38bdf8',
-                                padding: '6px 10px',
-                                borderRadius: '8px',
-                                cursor: 'pointer',
-                                fontSize: '0.85rem'
-                            }}>
+                            {/* Functional Working Mute Toggle Button */}
+                            <button
+                                onClick={toggleVoiceMute}
+                                title={voiceMuted ? "Unmute AI Voice (Voice is currently OFF)" : "Mute AI Voice (Voice is currently ON)"}
+                                style={{
+                                    background: voiceMuted ? 'rgba(239, 68, 68, 0.2)' : 'rgba(56, 189, 248, 0.15)',
+                                    border: voiceMuted ? '1px solid rgba(239, 68, 68, 0.4)' : '1px solid rgba(56, 189, 248, 0.4)',
+                                    color: voiceMuted ? '#f87171' : '#38bdf8',
+                                    padding: '6px 10px',
+                                    borderRadius: '8px',
+                                    cursor: 'pointer',
+                                    fontSize: '0.78rem',
+                                    fontWeight: 700,
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    transition: 'all 0.2s ease'
+                                }}>
                                 <i className={`fas ${voiceMuted ? 'fa-volume-xmark' : 'fa-volume-high'}`}></i>
+                                <span>{voiceMuted ? 'Muted' : 'Voice ON'}</span>
                             </button>
+
                             <button onClick={handleClose} style={{
                                 background: 'rgba(255,255,255,0.06)',
                                 border: '1px solid rgba(255,255,255,0.1)',
@@ -369,38 +406,38 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
                         </div>
                     </div>
 
-                    {/* Animated Visualizer Sound Waves */}
+                    {/* Visualizer Sound Waves */}
                     <div style={{
-                        padding: '12px 20px',
-                        background: 'rgba(0, 0, 0, 0.25)',
+                        padding: '10px 18px',
+                        background: 'rgba(0, 0, 0, 0.2)',
                         borderBottom: '1px solid rgba(255,255,255,0.05)',
                         display: 'flex',
                         alignItems: 'center',
-                        justify: 'center',
+                        justifyContent: 'center',
                         gap: '4px'
                     }}>
                         {[0.6, 1.2, 0.8, 1.5, 0.9, 1.3, 0.7, 1.1, 0.5].map((scale, i) => (
                             <div key={i} style={{
-                                width: '4px',
-                                height: isListening || isSpeaking ? `${24 * scale}px` : '6px',
+                                width: '3px',
+                                height: isListening || isSpeaking ? `${20 * scale}px` : '5px',
                                 background: isListening ? '#ef4444' : (isSpeaking ? '#38bdf8' : 'rgba(255,255,255,0.2)'),
-                                borderRadius: '4px',
+                                borderRadius: '3px',
                                 transition: 'all 0.15s ease'
                             }}></div>
                         ))}
-                        <span style={{ fontSize: '0.78rem', color: '#94a3b8', marginLeft: '10px', fontWeight: 500 }}>
-                            {isListening ? 'Speak your query clearly...' : (isSpeaking ? 'AI Voice Active' : 'Tap Mic to speak')}
+                        <span style={{ fontSize: '0.75rem', color: '#94a3b8', marginLeft: '8px', fontWeight: 500 }}>
+                            {voiceMuted ? 'Voice output is muted' : (isListening ? 'Speak clearly into your microphone' : (isSpeaking ? 'AI Voice Active' : 'Tap Mic to speak'))}
                         </span>
                     </div>
 
                     {/* Chat Messages Body */}
                     <div style={{
                         flex: 1,
-                        padding: '16px',
+                        padding: '14px',
                         overflowY: 'auto',
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '12px'
+                        gap: '10px'
                     }}>
                         {messages.map((m, index) => (
                             <div key={index} style={{
@@ -410,19 +447,18 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
                                     ? 'linear-gradient(135deg, #2563eb, #1d4ed8)'
                                     : 'rgba(15, 23, 42, 0.85)',
                                 border: m.sender === 'user' ? 'none' : '1px solid rgba(56, 189, 248, 0.2)',
-                                padding: '12px 16px',
-                                borderRadius: m.sender === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
-                                color: '#f8fafc',
-                                boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)'
+                                padding: '10px 14px',
+                                borderRadius: m.sender === 'user' ? '14px 14px 4px 14px' : '14px 14px 14px 4px',
+                                color: '#f8fafc'
                             }}>
-                                <p style={{ margin: 0, fontSize: '0.9rem', lineHeight: 1.5 }}>
+                                <p style={{ margin: 0, fontSize: '0.88rem', lineHeight: 1.5 }}>
                                     {m.text}
                                 </p>
 
                                 {m.steps && (
-                                    <div style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                                    <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
                                         {m.steps.map((st, sIdx) => (
-                                            <div key={sIdx} style={{ fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '4px' }}>
+                                            <div key={sIdx} style={{ fontSize: '0.78rem', color: '#cbd5e1', marginBottom: '3px' }}>
                                                 {st}
                                             </div>
                                         ))}
@@ -436,18 +472,18 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
                                             handleClose();
                                         }}
                                         style={{
-                                            marginTop: '12px',
-                                            padding: '8px 14px',
-                                            borderRadius: '8px',
+                                            marginTop: '10px',
+                                            padding: '6px 12px',
+                                            borderRadius: '6px',
                                             background: 'linear-gradient(135deg, #0284c7, #2563eb)',
                                             border: 'none',
                                             color: '#fff',
-                                            fontSize: '0.82rem',
+                                            fontSize: '0.78rem',
                                             fontWeight: 700,
                                             cursor: 'pointer',
                                             display: 'inline-flex',
                                             alignItems: 'center',
-                                            gap: '6px'
+                                            gap: '5px'
                                         }}>
                                         <i className={`fas ${m.action.icon}`}></i> {m.action.label}
                                     </button>
@@ -459,7 +495,7 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
 
                     {/* Quick Voice Prompts */}
                     <div style={{
-                        padding: '8px 12px',
+                        padding: '6px 10px',
                         background: 'rgba(0,0,0,0.2)',
                         borderTop: '1px solid rgba(255,255,255,0.05)',
                         display: 'flex',
@@ -476,12 +512,12 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
                                 key={pIdx}
                                 onClick={() => handleProcessIntent(prompt)}
                                 style={{
-                                    padding: '5px 10px',
-                                    borderRadius: '14px',
+                                    padding: '4px 8px',
+                                    borderRadius: '12px',
                                     background: 'rgba(255,255,255,0.05)',
                                     border: '1px solid rgba(255,255,255,0.1)',
                                     color: '#38bdf8',
-                                    fontSize: '0.75rem',
+                                    fontSize: '0.72rem',
                                     fontWeight: 600,
                                     cursor: 'pointer',
                                     whiteSpace: 'nowrap'
@@ -493,28 +529,28 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
 
                     {/* Mic Button & Manual Voice Command Input Bar */}
                     <div style={{
-                        padding: '14px 16px',
+                        padding: '12px 14px',
                         background: '#070d1a',
                         borderTop: '1px solid rgba(255,255,255,0.08)',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '10px'
+                        gap: '8px'
                     }}>
                         <button
                             onClick={toggleListening}
+                            title={isListening ? "Stop listening" : "Tap to speak"}
                             style={{
-                                width: '44px',
-                                height: '44px',
-                                borderRadius: '12px',
+                                width: '40px',
+                                height: '40px',
+                                borderRadius: '10px',
                                 background: isListening ? '#ef4444' : 'linear-gradient(135deg, #2563eb, #0284c7)',
                                 border: 'none',
                                 color: '#fff',
-                                fontSize: '1.1rem',
+                                fontSize: '1rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center',
-                                boxShadow: isListening ? '0 0 20px rgba(239,68,68,0.8)' : '0 0 15px rgba(37,99,235,0.5)'
+                                justifyContent: 'center'
                             }}>
                             <i className={`fas ${isListening ? 'fa-microphone-slash' : 'fa-microphone'}`}></i>
                         </button>
@@ -533,10 +569,10 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
                                 flex: 1,
                                 background: 'rgba(255,255,255,0.06)',
                                 border: '1px solid rgba(255,255,255,0.12)',
-                                borderRadius: '10px',
-                                padding: '10px 14px',
+                                borderRadius: '8px',
+                                padding: '8px 12px',
                                 color: '#f8fafc',
-                                fontSize: '0.88rem',
+                                fontSize: '0.85rem',
                                 outline: 'none'
                             }}
                         />
@@ -548,9 +584,9 @@ const VoiceAIAssistant = ({ isOpen: externalIsOpen, onClose: externalOnClose }) 
                                 background: transcript.trim() ? '#38bdf8' : 'rgba(255,255,255,0.05)',
                                 border: 'none',
                                 color: transcript.trim() ? '#0f172a' : '#64748b',
-                                width: '40px',
-                                height: '40px',
-                                borderRadius: '10px',
+                                width: '36px',
+                                height: '36px',
+                                borderRadius: '8px',
                                 cursor: transcript.trim() ? 'pointer' : 'default',
                                 display: 'flex',
                                 alignItems: 'center',
