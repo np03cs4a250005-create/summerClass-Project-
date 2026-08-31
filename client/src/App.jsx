@@ -132,7 +132,7 @@ const AppRoutes = () => (
         <Route path="/feedback" element={<ProtectedRoute><Layout><Feedback /></Layout></ProtectedRoute>} />
         <Route path="/team" element={<ProtectedRoute><Layout><TeamSpeakers /></Layout></ProtectedRoute>} />
         <Route path="/finance" element={<ProtectedRoute><Layout><FinanceSponsors /></Layout></ProtectedRoute>} />
-        <Route path="/gamification" element={<ProtectedRoute><Layout><GamificationFiles /></Layout></ProtectedRoute>} />
+        <Route path="/gamification" element={<GamificationFiles />} />
         <Route path="/realtime" element={<ProtectedRoute><Layout><LiveChat /></Layout></ProtectedRoute>} />
         <Route path="/tasks" element={<ProtectedRoute><Layout><TasksAgenda /></Layout></ProtectedRoute>} />
         <Route path="/security" element={<ProtectedRoute><Layout><SecurityLogs /></Layout></ProtectedRoute>} />

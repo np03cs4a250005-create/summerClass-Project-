@@ -418,17 +418,89 @@ const GamificationFiles = () => {
     };
 
     return (
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            {/* Hero Banner with Cerebrium Cyber Aesthetic */}
-            <div className="page-hero anim-fade-down" style={{
-                background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(124, 58, 237, 0.2) 50%, rgba(56, 189, 248, 0.15) 100%)',
-                border: '1.5px solid rgba(56, 189, 248, 0.35)',
-                borderRadius: '26px',
-                padding: '32px',
-                marginBottom: '28px',
-                boxShadow: '0 20px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+        <div style={{
+            minHeight: '100vh',
+            padding: '24px 20px 60px',
+            backgroundColor: '#030712',
+            backgroundImage: `
+                radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.25) 0%, rgba(37, 99, 235, 0.12) 35%, transparent 65%),
+                radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 10% 60%, rgba(20, 184, 166, 0.15) 0%, transparent 45%),
+                linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px)
+            `,
+            backgroundSize: '100% 100%, 100% 100%, 100% 100%, 48px 48px, 48px 48px',
+            backgroundAttachment: 'fixed',
+            color: '#f8fafc'
+        }}>
+            {/* Top Navigation Bar with Back to Home & Portal Switcher */}
+            <div style={{
+                maxWidth: '1200px',
+                margin: '0 auto 24px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '12px 24px',
+                borderRadius: '20px',
+                background: 'rgba(9, 14, 28, 0.85)',
+                border: '1.5px solid rgba(56, 189, 248, 0.3)',
+                boxShadow: '0 15px 35px rgba(0,0,0,0.6)',
                 backdropFilter: 'blur(20px)'
             }}>
+                <button
+                    onClick={() => navigate('/')}
+                    className="btn btn-secondary"
+                    style={{
+                        borderRadius: '12px',
+                        padding: '8px 18px',
+                        fontSize: '0.9rem',
+                        fontWeight: 700,
+                        background: 'rgba(56, 189, 248, 0.12)',
+                        color: '#38bdf8',
+                        border: '1.5px solid rgba(56, 189, 248, 0.35)',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                    }}>
+                    <i className="fas fa-arrow-left"></i> Back to Home
+                </button>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <i className="fas fa-cubes brand-logo" style={{ color: '#38bdf8', fontSize: '1.3rem' }}></i>
+                    <span style={{ fontWeight: 800, fontSize: '1.1rem', letterSpacing: '-0.3px' }}>Gatherly Arcade Lounge</span>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {user ? (
+                        <button
+                            onClick={() => navigate('/dashboard')}
+                            className="btn blue-glow-btn"
+                            style={{ borderRadius: '12px', padding: '8px 18px', fontSize: '0.88rem', fontWeight: 700 }}>
+                            <i className="fas fa-th-large" style={{ marginRight: '6px' }}></i> Dashboard
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => navigate('/login')}
+                            className="btn blue-glow-btn"
+                            style={{ borderRadius: '12px', padding: '8px 18px', fontSize: '0.88rem', fontWeight: 700 }}>
+                            <i className="fas fa-right-to-bracket" style={{ marginRight: '6px' }}></i> Sign In
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                {/* Hero Banner with Cerebrium Cyber Aesthetic */}
+                <div className="page-hero anim-fade-down" style={{
+                    background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(124, 58, 237, 0.2) 50%, rgba(56, 189, 248, 0.15) 100%)',
+                    border: '1.5px solid rgba(56, 189, 248, 0.35)',
+                    borderRadius: '26px',
+                    padding: '32px',
+                    marginBottom: '28px',
+                    boxShadow: '0 20px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
+                    backdropFilter: 'blur(20px)'
+                }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                         <div style={{ width: 64, height: 64, borderRadius: '20px', background: 'linear-gradient(135deg, #7c3aed, #ec4899)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 30px rgba(124, 58, 237, 0.6)', border: '1px solid rgba(255, 255, 255, 0.25)', flexShrink: 0, animation: 'floatUpDown 3s ease-in-out infinite' }}>
@@ -706,6 +778,7 @@ const GamificationFiles = () => {
                     </div>
                 </div>
             )}
+            </div>
         </div>
     );
 };
