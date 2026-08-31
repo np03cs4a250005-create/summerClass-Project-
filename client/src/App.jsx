@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './components/Toast';
-import { soundFx } from './utils/soundEffects';
 
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
-import ParticleCanvas from './components/ParticleCanvas';
-import BackgroundMusic from './components/BackgroundMusic';
-import VoiceAIAssistant from './components/VoiceAIAssistant';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -71,7 +67,6 @@ const Layout = ({ children }) => {
 
     return (
         <div className={`dashboard-layout ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`} style={{ display: 'flex', minHeight: '100vh', position: 'relative' }}>
-            <ParticleCanvas />
             <Sidebar
                 isOpen={isMobileOpen}
                 isCollapsed={isSidebarCollapsed}
@@ -92,7 +87,6 @@ const Layout = ({ children }) => {
                     <p>&copy; 2026 Gatherly Suite — Enterprise Event Platform</p>
                 </footer>
             </div>
-            <VoiceAIAssistant />
         </div>
     );
 };
@@ -125,17 +119,6 @@ const AppRoutes = () => (
 );
 
 const App = () => {
-    useEffect(() => {
-        const handleGlobalClick = (e) => {
-            const target = e.target.closest('button, .btn, a, [role="button"], input[type="submit"], input[type="button"], .tab-btn, .nav-item');
-            if (target) {
-                soundFx.playRoboticClick();
-            }
-        };
-        window.addEventListener('click', handleGlobalClick, true);
-        return () => window.removeEventListener('click', handleGlobalClick, true);
-    }, []);
-
     return (
         <AuthProvider>
             <ToastProvider>

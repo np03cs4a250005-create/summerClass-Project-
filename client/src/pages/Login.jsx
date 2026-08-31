@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
-import ParticleCanvas from '../components/ParticleCanvas';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -37,15 +36,8 @@ const Login = () => {
     };
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', padding: '20px', background: '#030712', color: '#f8fafc' }}>
-            {/* Cerebrium AI Perspective Grid & Nebula Canvas */}
-            <ParticleCanvas />
-
-            {/* Glowing Ambient Ambient Orbs */}
-            <div className="blue-ambient-orb" style={{ top: '-120px', left: '15%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(99, 102, 241, 0.35) 0%, rgba(56, 189, 248, 0.12) 60%, transparent 80%)' }}></div>
-            <div className="blue-ambient-orb" style={{ bottom: '-120px', right: '15%', width: '550px', height: '550px', background: 'radial-gradient(circle, rgba(56, 189, 248, 0.28) 0%, rgba(168, 85, 247, 0.12) 60%, transparent 80%)', animationDelay: '-4s' }}></div>
-
-            <div style={{ display: 'flex', width: '100%', maxWidth: '1020px', minHeight: '600px', borderRadius: '28px', overflow: 'hidden', background: 'rgba(9, 14, 28, 0.75)', border: '1px solid rgba(99, 102, 241, 0.35)', boxShadow: '0 30px 60px -12px rgba(0, 0, 0, 0.85), 0 0 45px rgba(99, 102, 241, 0.3)', backdropFilter: 'blur(24px)', zIndex: 5 }}>
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', padding: '20px', background: 'radial-gradient(ellipse at 50% 20%, #0d2a5d 0%, #081533 50%, #050b1a 100%)', color: '#f8fafc' }}>
+            <div style={{ display: 'flex', width: '100%', maxWidth: '1000px', minHeight: '560px', borderRadius: '24px', overflow: 'hidden', background: 'rgba(9, 14, 28, 0.85)', border: '1px solid rgba(56, 189, 248, 0.25)', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)', backdropFilter: 'blur(20px)', zIndex: 5 }}>
                 {/* Left Visual Panel */}
                 <div style={{ flex: 1.1, backgroundImage: "url('/assets/login_hero.png')", backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '40px' }} className="auth-left-panel">
                     <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(11, 17, 32, 0.9) 0%, rgba(37, 99, 235, 0.45) 100%)' }}></div>
