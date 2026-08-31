@@ -166,16 +166,27 @@ async function initDb() {
             timestamp TEXT NOT NULL
         )`);
 
+        // Ensure standard default accounts are always ready
+        const DEFAULT_ADMIN_HASH = '240eb518362d535e6a47a73477f8cf8c5eceab43e622c34a15054f67623cf530'; // sha-256 for admin123
+        const DEFAULT_USER_HASH = '6025d42fe0c3cb2a981cfa1f0cf1a581e7fb5a46c2d184eb444580228f4d4361';  // sha-256 for user123
+
+        try {
+            await db.asyncRun(`INSERT OR REPLACE INTO users (id, email, passwordHash, role, name) VALUES (?, ?, ?, ?, ?)`,
+                ['usr-admin', 'admin@gatherly.com', DEFAULT_ADMIN_HASH, 'Super Admin', 'System Administrator']);
+            await db.asyncRun(`INSERT OR REPLACE INTO users (id, email, passwordHash, role, name) VALUES (?, ?, ?, ?, ?)`,
+                ['usr-org', 'organizer@gatherly.com', DEFAULT_ADMIN_HASH, 'Organizer', 'Sarah Jenkins']);
+            await db.asyncRun(`INSERT OR REPLACE INTO users (id, email, passwordHash, role, name) VALUES (?, ?, ?, ?, ?)`,
+                ['usr-user', 'user@gatherly.com', DEFAULT_USER_HASH, 'Attendee / User', 'Demo Attendee']);
+            await db.asyncRun(`INSERT OR REPLACE INTO users (id, email, passwordHash, role, name) VALUES (?, ?, ?, ?, ?)`,
+                ['usr-att', 'attendee@gatherly.com', DEFAULT_USER_HASH, 'Attendee / User', 'Jane Attendee']);
+        } catch (e) {
+            console.error('Default users seed error:', e);
+        }
+
         // Seed Data if empty
         const userCount = await db.asyncGet(`SELECT count(*) as count FROM users`);
-        if (userCount && userCount.count === 0) {
+        if (userCount && userCount.count <= 4) {
             console.log('Seeding initial SQLite database values...');
-            const DEFAULT_ADMIN_HASH = '240eb518362d535e6a47a73477f8cf8c5eceab43e622c34a15054f67623cf530'; // sha-256 for admin123
-
-            await db.asyncRun(`INSERT INTO users (id, email, passwordHash, role, name) VALUES (?, ?, ?, ?, ?)`,
-                ['usr-1', 'admin@gatherly.com', DEFAULT_ADMIN_HASH, 'Super Admin', 'System Administrator']);
-            await db.asyncRun(`INSERT INTO users (id, email, passwordHash, role, name) VALUES (?, ?, ?, ?, ?)`,
-                ['usr-2', 'organizer@gatherly.com', DEFAULT_ADMIN_HASH, 'Organizer', 'Sarah Jenkins']);
 
             // Events
             await db.asyncRun(`INSERT INTO events (id, name, category, tags, description, date, time, location, venueId, capacity, status, priority, color, isPublic, isFeatured, isPublished) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,

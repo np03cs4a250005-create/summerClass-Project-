@@ -4,8 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('admin@gatherly.com');
+    const [password, setPassword] = useState('admin123');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { login } = useAuth();
@@ -18,9 +18,13 @@ const Login = () => {
         if (!email || !password) { setError('Please enter email and password.'); return; }
         try {
             setLoading(true);
-            await login(email, password);
-            showToast('Welcome back! Login successful.', 'success');
-            navigate('/dashboard');
+            const user = await login(email, password);
+            showToast(`Welcome ${user?.name || user?.email}! Login successful.`, 'success');
+            if (user?.role === 'Super Admin' || user?.role === 'Organizer') {
+                navigate('/dashboard');
+            } else {
+                navigate('/events');
+            }
         } catch (err) {
             const msg = err.response?.data?.error || 'Invalid credentials.';
             setError(msg);
